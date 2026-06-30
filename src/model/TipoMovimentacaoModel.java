@@ -1,6 +1,6 @@
 package model;
 
-class TipoMovimentacaoModel{
+public class TipoMovimentacaoModel{
     private int id_tipo;
     private String tipo;
 
