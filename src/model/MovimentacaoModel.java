@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class movimentacaoModel {
+public class MovimentacaoModel {
     private int idMovimentacao;
     private int qtdMovimentacao;
     private java.time.LocalDate dataMovimentacao;
@@ -8,10 +8,10 @@ public class movimentacaoModel {
     private Produto produto;
     private TipoMovimentacao tipo;
 
-    public movimentacaoModel(){
+    public MovimentacaoModel(){
     }
 
-    public movimentacaoModel(int idMovimentacao, int qtdMovimentacao, LocalDate dataMovimentacao, Funcionario funcionario, Produto produto, TipoMovimentacao tipo) {
+    public MovimentacaoModel(int idMovimentacao, int qtdMovimentacao, LocalDate dataMovimentacao, Funcionario funcionario, Produto produto, TipoMovimentacao tipo) {
         this.idMovimentacao = idMovimentacao;
         this.qtdMovimentacao = qtdMovimentacao;
         this.dataMovimentacao = dataMovimentacao;
