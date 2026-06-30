@@ -7,9 +7,9 @@ public class ProdutoModel {
     private int qtd_produto;
     private int qtd_minima;
     private boolean ativo;
-
     
-    public Produto(int id_produto, String nome_produto, String descricao_produto, int qtd_produto, int qtd_minima,
+    // Construtores:
+    public ProdutoModel(int id_produto, String nome_produto, String descricao_produto, int qtd_produto, int qtd_minima,
             boolean ativo) {
         this.id_produto = id_produto;
         this.nome_produto = nome_produto;
@@ -18,9 +18,7 @@ public class ProdutoModel {
         this.qtd_minima = qtd_minima;
         this.ativo = ativo;
     }
-
-
-    public Produto(String nome_produto, String descricao_produto, int qtd_produto, int qtd_minima, boolean ativo) {
+    public ProdutoModel(String nome_produto, String descricao_produto, int qtd_produto, int qtd_minima, boolean ativo) {
         this.nome_produto = nome_produto;
         this.descricao_produto = descricao_produto;
         this.qtd_produto = qtd_produto;
@@ -28,7 +26,7 @@ public class ProdutoModel {
         this.ativo = ativo;
     }
 
-
+    // Métodos:
     public int getId_produto() {
         return id_produto;
     }
