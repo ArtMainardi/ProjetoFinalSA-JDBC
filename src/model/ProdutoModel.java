@@ -1,3 +1,5 @@
+package model;
+
 public class ProdutoModel {
     private int id_produto;
     private String nome_produto;
