@@ -1,17 +1,19 @@
+package model;
+
 import java.time.LocalDate;
 
-public class movimentacaoModel {
+public class MovimentacaoModel {
     private int idMovimentacao;
     private int qtdMovimentacao;
     private java.time.LocalDate dataMovimentacao;
-    private Funcionario funcionario;
-    private Produto produto;
+    private FuncionarioModel funcionario;
+    private ProdutoModel produto;
     private TipoMovimentacao tipo;
 
-    public movimentacaoModel(){
+    public MovimentacaoModel(){
     }
 
-    public movimentacaoModel(int idMovimentacao, int qtdMovimentacao, LocalDate dataMovimentacao, Funcionario funcionario, Produto produto, TipoMovimentacao tipo) {
+    public MovimentacaoModel(int idMovimentacao, int qtdMovimentacao, LocalDate dataMovimentacao, Funcionario funcionario, Produto produto, TipoMovimentacao tipo) {
         this.idMovimentacao = idMovimentacao;
         this.qtdMovimentacao = qtdMovimentacao;
         this.dataMovimentacao = dataMovimentacao;
@@ -44,19 +46,19 @@ public class movimentacaoModel {
         this.dataMovimentacao = dataMovimentacao;
     }
 
-    public Funcionario getFuncionario() {
+    public FuncionarioModel getFuncionario() {
         return funcionario;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
+    public void setFuncionario(FuncionarioModel funcionario) {
         this.funcionario = funcionario;
     }
 
-    public Produto getProduto() {
+    public ProdutoModel getProduto() {
         return produto;
     }
 
-    public void setProduto(Produto produto) {
+    public void setProduto(ProdutoModel produto) {
         this.produto = produto;
     }
 

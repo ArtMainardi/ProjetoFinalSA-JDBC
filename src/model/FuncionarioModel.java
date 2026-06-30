@@ -1,3 +1,5 @@
+package model;
+
 public class FuncionarioModel {
     private int id_funcionario;
     private String nome_funcionario;
