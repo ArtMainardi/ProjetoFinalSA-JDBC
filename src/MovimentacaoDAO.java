@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import model.MovimentacaoModel;
 
 public class MovimentacaoDAO {
     private Connection conexao;
@@ -15,9 +16,9 @@ public class MovimentacaoDAO {
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, m.getQtdMovimentacao());
             stmt.setObject(2, m.getDataMovimentacao());
-            stmt.setInt(3, m.getIdFuncionario());     
-            stmt.setInt(4, m.getIdProduto());          
-            stmt.setInt(5, m.getIdTipo());              
+            stmt.setInt(3, m.getFuncionario().getId_funcionario());     
+            stmt.setInt(4, m.getProduto().getId_produto());          
+            stmt.setInt(5, m.getTipo().getId_tipo());              
             
             stmt.executeUpdate();
         }
