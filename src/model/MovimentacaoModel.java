@@ -8,12 +8,12 @@ public class MovimentacaoModel {
     private java.time.LocalDate dataMovimentacao;
     private FuncionarioModel funcionario;
     private ProdutoModel produto;
-    private TipoMovimentacao tipo;
+    private TipoMovimentacaoModel tipo;
 
     public MovimentacaoModel(){
     }
 
-    public MovimentacaoModel(int idMovimentacao, int qtdMovimentacao, LocalDate dataMovimentacao, Funcionario funcionario, Produto produto, TipoMovimentacao tipo) {
+    public MovimentacaoModel(int idMovimentacao, int qtdMovimentacao, LocalDate dataMovimentacao, FuncionarioModel funcionario, ProdutoModel produto, TipoMovimentacaoModel tipo) {
         this.idMovimentacao = idMovimentacao;
         this.qtdMovimentacao = qtdMovimentacao;
         this.dataMovimentacao = dataMovimentacao;
@@ -62,11 +62,11 @@ public class MovimentacaoModel {
         this.produto = produto;
     }
 
-    public TipoMovimentacao getTipo() {
+    public TipoMovimentacaoModel getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoMovimentacao tipo) {
+    public void setTipo(TipoMovimentacaoModel tipo) {
         this.tipo = tipo;
     }
 }
