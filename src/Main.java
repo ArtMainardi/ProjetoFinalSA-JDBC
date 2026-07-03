@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
+    static Style sty = new Style();
 
     public static void main(String[] args){
         login();
@@ -9,12 +10,13 @@ public class Main {
 
     // Procedimento para tela de login (BETA):
     public static void login(){
+        sty.quadro("Tela de Login");
         String emailCadastrado = "jdbc@gmail.com";
         String senhaCadastrada = "123";
 
-        System.out.println("Digite seu email: ");
+        System.out.print("Digite seu email: ");
         String email = sc.nextLine();
-        System.out.println("Digite sua senha: ");
+        System.out.print("Digite sua senha: ");
         String senha = sc.nextLine();
 
         if(email.equals(emailCadastrado)){
