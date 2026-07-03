@@ -92,4 +92,38 @@ public class FuncionarioDAO {
             }
         }
     }
+
+    public boolean desativar(int id) throws SQLException{
+        String sql = "UPDATE Funcionario SET ativo = false WHERE id_funcionario = ?";
+
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, id);
+
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if(linhasAfetadas > 0){
+                return true;
+            }
+            else {
+                return false;
+            }     
+        }
+    }
+
+    public boolean ativar(int id) throws SQLException{
+        String sql = "UPDATE Funcionario ativo = true WHERE id_funcionario = ?";
+
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, id);
+            
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if(linhasAfetadas > 0){
+                return  true;
+            }else {
+                return false;
+            }
+        }
+    }
+
 }
