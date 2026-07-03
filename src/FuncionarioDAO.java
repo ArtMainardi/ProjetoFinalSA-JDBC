@@ -1,13 +1,16 @@
+import connection.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import model.FuncionarioModel;
 
 public class FuncionarioDAO {
-       Conexao conexao = new Conexao();
+    Conexao conexao = new Conexao();
 
-        public ArrayList <FuncionarioModel> listar() throws SQLException{
+    public ArrayList <FuncionarioModel> listar() throws SQLException{
         ArrayList<FuncionarioModel> lista = new ArrayList<>();
 
         String sql = "SELECT * FROM Funcionario";
@@ -30,20 +33,18 @@ public class FuncionarioDAO {
         return lista;
      }
 
-     public void inserir (FuncionarioModel f) throws SQLException{
-         String sql = "INSERT INTO Funcionario(nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo) VALUES (?,?,?,?,?)";
+    public void inserir (FuncionarioModel f) throws SQLException{
+        String sql = "INSERT INTO Funcionario(nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo) VALUES (?,?,?,?,?)";
 
-         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, f.getNome_funcionario());
+            stmt.setString(2, f.getEmail_funcionario());
+            stmt.setString(3, f.getSenha_funcionario());
+            stmt.setBoolean(4, f.isIs_admin());
+            stmt.setBoolean(5, f.isAtivo());
 
-                stmt.setString(1, f.getNome_funcionario());
-                stmt.setString(2, f.getEmail_funcionario());
-                stmt.setString(3, f.getSenha_funcionario());
-                stmt.setBoolean(4, f.isIs_admin());
-                stmt.setBoolean(5, f.isAtivo());
-
-                stmt.executeUpdate();
-                System.out.println("Produto inserido com sucesso!");
-
-            }
+            stmt.executeUpdate();
+            System.out.println("Produto inserido com sucesso!");
         }
+    }
 }
