@@ -5,6 +5,7 @@ public class Main {
     static Style sty = new Style();
 
     public static void main(String[] args){
+        clear();
         login();
     }
 
@@ -17,7 +18,7 @@ public class Main {
         boolean verify = false;
         while(!verify){
             sty.titulo("TELA DE LOGIN");
-            
+
             // Recebe dados do usuário:
             System.out.print("Digite seu email: ");
             String email = sc.nextLine();
@@ -36,6 +37,20 @@ public class Main {
                 sty.quadro("ERRO: email inválido!");
             }
             System.out.print("Pressione ENTER para continuar");
+            sc.nextLine();
+            clear();
+        }
+    }
+
+    // Procedimento para limpar a tela:
+    public static void clear(){
+        for(int cont = 0; cont < 20; cont++){
+            System.out.println(" ");
+        }
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        for(int cont = 0; cont < 2; cont++){
+            System.out.println(" ");
         }
     }
 }
