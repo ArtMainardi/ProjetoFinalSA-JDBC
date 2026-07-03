@@ -125,5 +125,24 @@ public class FuncionarioDAO {
             }
         }
     }
+    public boolean verificarEmail(String email)throws SQLException{
+        String sql = "SELECT email_funcionario FROM Funcionario WHERE email_funcionario = ?";
+        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, email);
 
+            try (ResultSet resultado = stmt.executeQuery()){
+                return resultado.next();
+            }
+        }
+    }
+    public boolean verificarSenha(String senha)throws SQLException{
+        String sql = "SELECT senha_funcionario FROM Funcionario WHERE senha_funcionario = ?";
+        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, senha);
+
+            try (ResultSet resultado = stmt.executeQuery()){
+                return resultado.next();
+            }
+        }
+    }
 }
