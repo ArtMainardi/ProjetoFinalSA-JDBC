@@ -34,4 +34,22 @@ public class Conexao {
 
         return DriverManager.getConnection(url, user, password);
     }
+
+    public boolean testar() {
+        try {
+            Properties props = carregarPropriedades();
+            
+            // Pega os valores usando as chaves exatas que você definiu no arquivo
+            String url = props.getProperty("db.url");
+            String user = props.getProperty("db.user");
+            String password = props.getProperty("db.password");
+            
+            Connection conn = DriverManager.getConnection(url, user, password);
+            System.out.println("Conexão estabelecida com sucesso!");
+            return true;
+        } catch (Exception erro){
+            System.out.println("ERRO: " + erro.getMessage());
+            return false;
+        }
+    }
 }

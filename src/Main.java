@@ -1,4 +1,4 @@
-import connection.TesteConexao;
+import connection.Conexao;
 import java.util.Scanner;
 
 public class Main {
@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args){
         // Verifica conexão com o banco de dados:
         sty.titulo("Testando conexão");
-        TesteConexao teste = new TesteConexao();
+        Conexao teste = new Conexao();
         if(!teste.testar()){
             System.out.print("Pressione ENTER para continuar");
             sc.nextLine();
