@@ -1,3 +1,4 @@
+import connection.TesteConexao;
 import java.util.Scanner;
 
 public class Main {
@@ -5,6 +6,17 @@ public class Main {
     static Style sty = new Style();
 
     public static void main(String[] args){
+        // Verifica conexão com o banco de dados:
+        sty.titulo("Testando conexão");
+        TesteConexao teste = new TesteConexao();
+        if(!teste.testar()){
+            System.out.print("Pressione ENTER para continuar");
+            sc.nextLine();
+            return;
+        }
+        System.out.print("Pressione ENTER para continuar");
+        sc.nextLine();
+
         clear();
         login();
     }
@@ -17,7 +29,7 @@ public class Main {
         // Laço de repetição para o login:
         boolean verify = false;
         while(!verify){
-            sty.titulo("TELA DE LOGIN");
+            sty.titulo("Tela de Login");
 
             // Recebe dados do usuário:
             System.out.print("Digite seu email: ");

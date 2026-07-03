@@ -4,15 +4,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class TesteConexao {
-    public static void main(String[] args) {
+    public boolean testar() {
         try {
             Connection conn = DriverManager.getConnection("",
-                    "avnadmin",
+                    "",
                     ""
             );
-            System.out.println("Conexão estabelecida com sucesso !");
+            System.out.println("Conexão estabelecida com sucesso!");
+            return true;
         } catch (Exception erro){
             System.out.println("ERRO: " + erro.getMessage());
+            return false;
         }
     }
 }
