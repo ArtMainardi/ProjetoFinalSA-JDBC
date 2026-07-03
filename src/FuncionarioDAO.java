@@ -10,30 +10,8 @@ import model.FuncionarioModel;
 public class FuncionarioDAO {
     Conexao conexao = new Conexao();
 
-    public ArrayList <FuncionarioModel> listar() throws SQLException{
-        ArrayList<FuncionarioModel> lista = new ArrayList<>();
-
-        String sql = "SELECT * FROM Funcionario";
-
-        Connection conn = conexao.conectar();
-        Statement stmt = conn.createStatement();
-        ResultSet resultado = stmt.executeQuery(sql);
-
-        while(resultado.next()){
-            int id_funcionario = resultado.getInt("id_funcionario");
-            String nome_funcionario = resultado.getString("nome_funcionario");
-            String email_funcionario = resultado.getString("email_funcionario");
-            String senha_funcionario = resultado.getString("senha_funcionario");
-            boolean is_admin = resultado.getBoolean("is_admin");
-            boolean ativo = resultado.getBoolean("ativo");
-
-            lista.add(new FuncionarioModel(id_funcionario, nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo));
-        }
-
-        return lista;
-     }
-
-    public void inserir (FuncionarioModel f) throws SQLException{
+    // CREATE:
+    public boolean create(FuncionarioModel f) throws SQLException{
         String sql = "INSERT INTO Funcionario(nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo) VALUES (?,?,?,?,?)";
 
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -43,20 +21,49 @@ public class FuncionarioDAO {
             stmt.setBoolean(4, f.isIs_admin());
             stmt.setBoolean(5, f.isAtivo());
 
-            stmt.executeUpdate();
-            System.out.println("Produto inserido com sucesso!");
+            // Verifica se o dado foi criado:
+            int linhas = stmt.executeUpdate(); // Pega a quantidade de linhas afetadas pela query
+            if(linhas > 0){
+                return true;
+            } else{
+                return false;
+            }
         }
     }
 
-    public FuncionarioModel buscar (int id ) throws SQLException{
+    // READ:
+    public ArrayList<FuncionarioModel> read() throws SQLException{
+        ArrayList<FuncionarioModel> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Funcionario";
+
+        try(Connection conn = conexao.conectar(); Statement stmt = conn.createStatement();) {
+            ResultSet resultado = stmt.executeQuery(sql);
+
+            // Adiciona objetos na lista:
+            while(resultado.next()){
+                int id_funcionario = resultado.getInt("id_funcionario");
+                String nome_funcionario = resultado.getString("nome_funcionario");
+                String email_funcionario = resultado.getString("email_funcionario");
+                String senha_funcionario = resultado.getString("senha_funcionario");
+                boolean is_admin = resultado.getBoolean("is_admin");
+                boolean ativo = resultado.getBoolean("ativo");
+
+                lista.add(new FuncionarioModel(id_funcionario, nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo));
+            }
+            return lista;
+        }
+    }
+
+    // READ (ID):
+    public FuncionarioModel readId(int id) throws SQLException{
         String sql = "SELECT * FROM Funcionario WHERE id_funcionario = ?";
 
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
-
             stmt.setInt(1,id);
 
             try(ResultSet resultado = stmt.executeQuery();){
-                if(resultado.next()){
+                if(resultado.next()){ // Verifica se encontrou um dado
+                    // Salva dados no objeto:
                     int id_funcionario = resultado.getInt("id_funcionario");
                     String nome_funcionario = resultado.getString("nome_funcionario");
                     String email_funcionario = resultado.getString("email_funcionario");
@@ -64,16 +71,18 @@ public class FuncionarioDAO {
                     boolean is_admin = resultado.getBoolean("is_admin");
                     boolean ativo = resultado.getBoolean("ativo");
 
+                    // Retorna objeto:
                     FuncionarioModel funcionarioBusca = new FuncionarioModel(id_funcionario, nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo);
                     return funcionarioBusca;
-
+                } else{
+                    return null;
                 }
             }
         }
-             return null;
     }
 
-    public boolean atualizar(FuncionarioModel funcionarioModificado) throws SQLException{
+    // UPDATE:
+    public boolean update(FuncionarioModel funcionarioModificado) throws SQLException{
         String sql = "UPDATE Funcionario SET nome_funcionario = ?, email_funcionario = ?, senha_funcionario = ?, is_admin = ?, ativo = ? WHERE id_funcionario = ?";    
 
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -83,8 +92,8 @@ public class FuncionarioDAO {
             stmt.setBoolean(4, funcionarioModificado.isIs_admin());
             stmt.setBoolean(5, funcionarioModificado.isAtivo());
 
-            int linhasAfetadas = stmt.executeUpdate();
-
+            // Verifica se o dado foi atualizado:
+            int linhasAfetadas = stmt.executeUpdate(); // Pega a quantidade de linhas afetadas pela query
             if(linhasAfetadas > 0){
                 return true;
             }else {
@@ -93,14 +102,15 @@ public class FuncionarioDAO {
         }
     }
 
+    // DESATIVAR ("DELETE"):
     public boolean desativar(int id) throws SQLException{
         String sql = "UPDATE Funcionario SET ativo = false WHERE id_funcionario = ?";
 
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setInt(1, id);
 
-            int linhasAfetadas = stmt.executeUpdate();
-
+            // Verifica se o dado foi desativado: 
+            int linhasAfetadas = stmt.executeUpdate(); // Pega a quantidade de linhas afetadas pela query
             if(linhasAfetadas > 0){
                 return true;
             }
@@ -116,8 +126,8 @@ public class FuncionarioDAO {
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setInt(1, id);
             
-            int linhasAfetadas = stmt.executeUpdate();
-
+            // Verifica se o dado foi ativado:
+            int linhasAfetadas = stmt.executeUpdate(); // Pega a quantidade de linhas afetadas pela query
             if(linhasAfetadas > 0){
                 return  true;
             }else {
