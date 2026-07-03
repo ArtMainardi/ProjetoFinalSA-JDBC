@@ -125,23 +125,35 @@ public class FuncionarioDAO {
             }
         }
     }
+
     public boolean verificarEmail(String email)throws SQLException{
         String sql = "SELECT email_funcionario FROM Funcionario WHERE email_funcionario = ?";
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setString(1, email);
 
+            // Verifica se existe um usuário com esse email:
             try (ResultSet resultado = stmt.executeQuery()){
                 return resultado.next();
             }
         }
     }
-    public boolean verificarSenha(String senha)throws SQLException{
-        String sql = "SELECT senha_funcionario FROM Funcionario WHERE senha_funcionario = ?";
-        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setString(1, senha);
+    
+    public boolean verificarSenha(String senha, String email)throws SQLException{
+        // Procura senha do funcionário pelo email dele:
+        String sql = "SELECT senha_funcionario FROM Funcionario WHERE email_funcionario = ?";
 
+        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, email);
             try (ResultSet resultado = stmt.executeQuery()){
-                return resultado.next();
+                resultado.next();
+                String senhaBanco = resultado.getString("senha_funcionario");
+
+                // Verifica se a senha do BD é a mesma que a digitada pelo usuário:
+                if(senhaBanco.equals(senha)){
+                    return true;
+                } else{
+                    return false;
+                }
             }
         }
     }
