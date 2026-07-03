@@ -97,7 +97,7 @@ public class FuncionarioDAO {
         String sql = "UPDATE Funcionario SET ativo = false WHERE id_funcionario = ?";
 
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
 
             int linhasAfetadas = stmt.executeUpdate();
 
@@ -114,7 +114,7 @@ public class FuncionarioDAO {
         String sql = "UPDATE Funcionario ativo = true WHERE id_funcionario = ?";
 
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
             
             int linhasAfetadas = stmt.executeUpdate();
 
