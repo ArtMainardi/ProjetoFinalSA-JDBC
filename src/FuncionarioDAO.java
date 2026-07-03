@@ -49,7 +49,7 @@ public class FuncionarioDAO {
     }
 
     public FuncionarioModel buscar (int id ) throws SQLException{
-        String sql = "SELECT * FROM Funcionario WHERE id = ?";
+        String sql = "SELECT * FROM Funcionario WHERE id_funcionario = ?";
 
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
 
@@ -71,5 +71,25 @@ public class FuncionarioDAO {
             }
         }
              return null;
+    }
+
+    public boolean atualizar(FuncionarioModel funcionarioModificado) throws SQLException{
+        String sql = "UPDATE Funcionario SET nome_funcionario = ?, email_funcionario = ?, senha_funcionario = ?, is_admin = ?, ativo = ? WHERE id_funcionario = ?";    
+
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, funcionarioModificado.getNome_funcionario());
+            stmt.setString(2, funcionarioModificado.getEmail_funcionario());
+            stmt.setString(3, funcionarioModificado.getSenha_funcionario());
+            stmt.setBoolean(4, funcionarioModificado.isIs_admin());
+            stmt.setBoolean(5, funcionarioModificado.isAtivo());
+
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if(linhasAfetadas > 0){
+                return true;
+            }else {
+                return false;
+            }
+        }
     }
 }
