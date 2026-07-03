@@ -102,14 +102,15 @@ public class FuncionarioDAO {
         }
     }
 
-    // DESATIVAR ("DELETE"):
-    public boolean desativar(int id) throws SQLException{
-        String sql = "UPDATE Funcionario SET ativo = false WHERE id_funcionario = ?";
+    // DESATIVAR/ATIVAR ("DELETE"):
+    public boolean desativarOuAtivar(int id, boolean estado) throws SQLException{
+        String sql = "UPDATE Funcionario SET ativo = ? WHERE id_funcionario = ?";
 
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setInt(1, id);
+            stmt.setBoolean(1, estado);
+            stmt.setInt(2, id);
 
-            // Verifica se o dado foi desativado: 
+            // Verifica se o dado foi modificado: 
             int linhasAfetadas = stmt.executeUpdate(); // Pega a quantidade de linhas afetadas pela query
             if(linhasAfetadas > 0){
                 return true;
@@ -117,22 +118,6 @@ public class FuncionarioDAO {
             else {
                 return false;
             }     
-        }
-    }
-
-    public boolean ativar(int id) throws SQLException{
-        String sql = "UPDATE Funcionario ativo = true WHERE id_funcionario = ?";
-
-        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setInt(1, id);
-            
-            // Verifica se o dado foi ativado:
-            int linhasAfetadas = stmt.executeUpdate(); // Pega a quantidade de linhas afetadas pela query
-            if(linhasAfetadas > 0){
-                return  true;
-            }else {
-                return false;
-            }
         }
     }
 
