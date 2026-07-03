@@ -10,7 +10,7 @@ public class Main {
 
     // Procedimento para tela de login (BETA):
     public static void login(){
-        sty.quadro("Tela de Login");
+        sty.titulo("TELA DE LOGIN");
         String emailCadastrado = "jdbc@gmail.com";
         String senhaCadastrada = "123";
 
