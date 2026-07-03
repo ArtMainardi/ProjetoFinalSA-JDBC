@@ -10,23 +10,32 @@ public class Main {
 
     // Procedimento para tela de login (BETA):
     public static void login(){
-        sty.titulo("TELA DE LOGIN");
         String emailCadastrado = "jdbc@gmail.com";
         String senhaCadastrada = "123";
 
-        System.out.print("Digite seu email: ");
-        String email = sc.nextLine();
-        System.out.print("Digite sua senha: ");
-        String senha = sc.nextLine();
+        // Laço de repetição para o login:
+        boolean verify = false;
+        while(!verify){
+            sty.titulo("TELA DE LOGIN");
+            
+            // Recebe dados do usuário:
+            System.out.print("Digite seu email: ");
+            String email = sc.nextLine();
+            System.out.print("Digite sua senha: ");
+            String senha = sc.nextLine();
 
-        if(email.equals(emailCadastrado)){
-            if(senha.equals(senhaCadastrada)){
-                sty.quadro("Login efetuado com sucesso!");
-            }else{
-                sty.quadro("ERRO: senha incorreta!");
+            // Verifica login:
+            if(email.equals(emailCadastrado)){
+                if(senha.equals(senhaCadastrada)){
+                    sty.quadro("Login efetuado com sucesso!");
+                    verify = true;
+                }else{
+                    sty.quadro("ERRO: senha incorreta!");
+                }
+            } else{
+                sty.quadro("ERRO: email inválido!");
             }
-        } else{
-            sty.quadro("ERRO: email inválido!");
+            System.out.print("Pressione ENTER para continuar");
         }
     }
 }
