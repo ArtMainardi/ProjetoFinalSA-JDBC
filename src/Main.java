@@ -21,12 +21,12 @@ public class Main {
 
         if(email.equals(emailCadastrado)){
             if(senha.equals(senhaCadastrada)){
-                System.out.println("Login efetuado com sucesso!");
+                sty.quadro("Login efetuado com sucesso!");
             }else{
-                System.out.println("ERRO: senha incorreta!");
+                sty.quadro("ERRO: senha incorreta!");
             }
         } else{
-            System.out.println("ERRO: email inválido!");
+            sty.quadro("ERRO: email inválido!");
         }
     }
 }
