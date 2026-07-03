@@ -47,4 +47,29 @@ public class FuncionarioDAO {
             System.out.println("Produto inserido com sucesso!");
         }
     }
+
+    public FuncionarioModel buscar (int id ) throws SQLException{
+        String sql = "SELECT * FROM Funcionario WHERE id = ?";
+
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1,id);
+
+            try(ResultSet resultado = stmt.executeQuery();){
+                if(resultado.next()){
+                    int id_funcionario = resultado.getInt("id_funcionario");
+                    String nome_funcionario = resultado.getString("nome_funcionario");
+                    String email_funcionario = resultado.getString("email_funcionario");
+                    String senha_funcionario = resultado.getString("senha_funcionario");
+                    boolean is_admin = resultado.getBoolean("is_admin");
+                    boolean ativo = resultado.getBoolean("ativo");
+
+                    FuncionarioModel funcionarioBusca = new FuncionarioModel(id_funcionario, nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo);
+                    return funcionarioBusca;
+
+                }
+            }
+        }
+             return null;
+    }
 }
