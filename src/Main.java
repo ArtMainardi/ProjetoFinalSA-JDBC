@@ -6,19 +6,25 @@ public class Main {
     static Style sty = new Style();
 
     public static void main(String[] args){
+        testarConexao();
+        clear();
+        login();
+    }
+
+    // Procedimento para testar conexão com o BD:
+    public static void testarConexao(){
         // Verifica conexão com o banco de dados:
         sty.titulo("Testando conexão");
         Conexao teste = new Conexao();
         if(!teste.testar()){
+            System.out.println(); // Espaçamento
             System.out.print("Pressione ENTER para continuar");
             sc.nextLine();
             return;
         }
+        System.out.println(); // Espaçamento
         System.out.print("Pressione ENTER para continuar");
         sc.nextLine();
-
-        clear();
-        login();
     }
 
     // Procedimento para tela de login (BETA):

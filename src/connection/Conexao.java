@@ -15,7 +15,7 @@ public class Conexao {
         try (FileInputStream fs = new FileInputStream("application.properties")) {
             props.load(fs);
         } catch (IOException e) {
-            System.err.println("Erro ao carregar o arquivo config.properties: " + e.getMessage());
+            System.err.println("Erro ao carregar o arquivo application.properties: " + e.getMessage());
         }
         return props;
     }
