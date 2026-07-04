@@ -1,11 +1,12 @@
 import connection.Conexao;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static Style sty = new Style();
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException{
         testarConexao();
         clear();
         login();
@@ -28,12 +29,11 @@ public class Main {
     }
 
     // Procedimento para tela de login (BETA):
-    public static void login(){
-        String emailCadastrado = "jdbc@gmail.com";
-        String senhaCadastrada = "123";
+    public static void login() throws SQLException{
+        FuncionarioDAO service = new FuncionarioDAO();
+        boolean verify = false;
 
         // Laço de repetição para o login:
-        boolean verify = false;
         while(!verify){
             sty.titulo("Tela de Login");
 
@@ -44,8 +44,8 @@ public class Main {
             String senha = sc.nextLine();
 
             // Verifica login:
-            if(email.equals(emailCadastrado)){
-                if(senha.equals(senhaCadastrada)){
+            if(service.verificarEmail(email)){
+                if(service.verificarSenha(senha, email)){
                     sty.quadro("Login efetuado com sucesso!");
                     verify = true;
                 }else{
