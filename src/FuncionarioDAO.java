@@ -18,7 +18,7 @@ public class FuncionarioDAO {
             stmt.setString(1, f.getNome_funcionario());
             stmt.setString(2, f.getEmail_funcionario());
             stmt.setString(3, f.getSenha_funcionario());
-            stmt.setBoolean(4, f.isIs_admin());
+            stmt.setBoolean(4, f.isAdmin());
             stmt.setBoolean(5, f.isAtivo());
 
             // Verifica se o dado foi criado:
@@ -81,6 +81,33 @@ public class FuncionarioDAO {
         }
     }
 
+    // READ (EMAIL):
+    public FuncionarioModel readEmail(String email) throws SQLException{
+        String sql = "SELECT * FROM Funcionario WHERE email_funcionario = ?";
+
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, email);
+
+            try(ResultSet resultado = stmt.executeQuery();){
+                if(resultado.next()){ // Verifica se encontrou um dado
+                    // Salva dados no objeto:
+                    int id_funcionario = resultado.getInt("id_funcionario");
+                    String nome_funcionario = resultado.getString("nome_funcionario");
+                    String email_funcionario = resultado.getString("email_funcionario");
+                    String senha_funcionario = resultado.getString("senha_funcionario");
+                    boolean is_admin = resultado.getBoolean("is_admin");
+                    boolean ativo = resultado.getBoolean("ativo");
+
+                    // Retorna objeto:
+                    FuncionarioModel funcionarioBusca = new FuncionarioModel(id_funcionario, nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo);
+                    return funcionarioBusca;
+                } else{
+                    return null;
+                }
+            }
+        }
+    }
+
     // UPDATE:
     public boolean update(FuncionarioModel funcionarioModificado) throws SQLException{
         String sql = "UPDATE Funcionario SET nome_funcionario = ?, email_funcionario = ?, senha_funcionario = ?, is_admin = ?, ativo = ? WHERE id_funcionario = ?";    
@@ -89,7 +116,7 @@ public class FuncionarioDAO {
             stmt.setString(1, funcionarioModificado.getNome_funcionario());
             stmt.setString(2, funcionarioModificado.getEmail_funcionario());
             stmt.setString(3, funcionarioModificado.getSenha_funcionario());
-            stmt.setBoolean(4, funcionarioModificado.isIs_admin());
+            stmt.setBoolean(4, funcionarioModificado.isAdmin());
             stmt.setBoolean(5, funcionarioModificado.isAtivo());
 
             // Verifica se o dado foi atualizado:
