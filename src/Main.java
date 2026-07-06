@@ -1,33 +1,39 @@
-import connection.TesteConexao;
+import connection.Conexao;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static Style sty = new Style();
 
-    public static void main(String[] args){
-        // Verifica conexão com o banco de dados:
-        sty.titulo("Testando conexão");
-        TesteConexao teste = new TesteConexao();
-        if(!teste.testar()){
-            System.out.print("Pressione ENTER para continuar");
-            sc.nextLine();
-            return;
-        }
-        System.out.print("Pressione ENTER para continuar");
-        sc.nextLine();
-
+    public static void main(String[] args) throws SQLException{
+        testarConexao();
         clear();
         login();
     }
 
+    // Procedimento para testar conexão com o BD:
+    public static void testarConexao(){
+        // Verifica conexão com o banco de dados:
+        sty.titulo("Testando conexão");
+        Conexao teste = new Conexao();
+        if(!teste.testar()){
+            System.out.println(); // Espaçamento
+            System.out.print("Pressione ENTER para continuar");
+            sc.nextLine();
+            return;
+        }
+        System.out.println(); // Espaçamento
+        System.out.print("Pressione ENTER para continuar");
+        sc.nextLine();
+    }
+
     // Procedimento para tela de login (BETA):
-    public static void login(){
-        String emailCadastrado = "jdbc@gmail.com";
-        String senhaCadastrada = "123";
+    public static void login() throws SQLException{
+        FuncionarioDAO service = new FuncionarioDAO();
+        boolean verify = false;
 
         // Laço de repetição para o login:
-        boolean verify = false;
         while(!verify){
             sty.titulo("Tela de Login");
 
@@ -38,8 +44,8 @@ public class Main {
             String senha = sc.nextLine();
 
             // Verifica login:
-            if(email.equals(emailCadastrado)){
-                if(senha.equals(senhaCadastrada)){
+            if(service.verificarEmail(email)){
+                if(service.verificarSenha(senha, email)){
                     sty.quadro("Login efetuado com sucesso!");
                     verify = true;
                 }else{
