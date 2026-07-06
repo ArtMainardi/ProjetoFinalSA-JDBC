@@ -1,15 +1,47 @@
 import connection.Conexao;
 import java.sql.SQLException;
 import java.util.Scanner;
+import model.FuncionarioModel;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static Style sty = new Style();
+    static FuncionarioModel usuarioAtual = new FuncionarioModel();
 
     public static void main(String[] args) throws SQLException{
         testarConexao();
         clear();
         login();
+
+        // Menu de opções:
+        sty.titulo("Gerenciador de Movimentação de Almoxarifado");
+        System.out.println("Digite uma opção: \n"
+                        + "1- Movimentações \n"
+                        + "2- Produtos"
+                        + (usuarioAtual.isAdmin() ? "3- Funcionários \n" : "")
+                        + "0- Sair");
+        int option = sc.nextInt();
+        do{
+            try{
+                switch (option) {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        if(!usuarioAtual.isAdmin()){
+                            throw new Exception("ERRO: opção digitada inválida!");
+                        } else{
+                        }
+                        break;
+                    default:
+                        throw new Exception("ERRO: opção digitada inválida!");
+                }
+            } catch(Exception e){
+                System.out.println(e.getMessage() + "\n");
+                continuar();
+            }
+        } while(option != 0);
     }
 
     // Procedimento para testar conexão com o BD:
@@ -19,13 +51,11 @@ public class Main {
         Conexao teste = new Conexao();
         if(!teste.testar()){
             System.out.println(); // Espaçamento
-            System.out.print("Pressione ENTER para continuar");
-            sc.nextLine();
+            continuar();
             return;
         }
         System.out.println(); // Espaçamento
-        System.out.print("Pressione ENTER para continuar");
-        sc.nextLine();
+        continuar();
     }
 
     // Procedimento para tela de login (BETA):
@@ -48,14 +78,14 @@ public class Main {
                 if(service.verificarSenha(senha, email)){
                     sty.quadro("Login efetuado com sucesso!");
                     verify = true;
+                    usuarioAtual = service.readEmail(email);
                 }else{
                     sty.quadro("ERRO: senha incorreta!");
                 }
             } else{
                 sty.quadro("ERRO: email inválido!");
             }
-            System.out.print("Pressione ENTER para continuar");
-            sc.nextLine();
+            continuar();
             clear();
         }
     }
@@ -70,5 +100,11 @@ public class Main {
         for(int cont = 0; cont < 2; cont++){
             System.out.println(" ");
         }
+    }
+
+    // Procedimento que pede confirmação para o usuário para então continuar com o programa:
+    public static void continuar(){
+        System.out.print("Pressione ENTER para continuar");
+        sc.nextLine();
     }
 }
