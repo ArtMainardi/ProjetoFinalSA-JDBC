@@ -45,14 +45,14 @@ public class MovimentacaoDAO {
                 int qtd = rs.getInt("qtd_movimentacao");
                 LocalDate data = rs.getObject("data_movimentacao", LocalDate.class);
 
-                FuncionarioModel funcionario = new FuncionarioModel();
-                funcionario.setId_funcionario(rs.getInt("id_funcionario"));
+                FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+                FuncionarioModel funcionario = funcionarioDAO.readId(rs.getInt("id_funcionario"));
 
-                ProdutoModel produto = new ProdutoModel();
-                produto.setId_produto(rs.getInt("id_produto"));
+                ProdutoDAO produtoDAO = new ProdutoDAO();
+                ProdutoModel produto = produtoDAO.readId(rs.getInt("id_produto"));
 
-                TipoMovimentacaoModel tipo = new TipoMovimentacaoModel();
-                tipo.setId_tipo(rs.getInt("id_tipo"));
+                TipoMovimentacaoDAO tipoMovimentacaoDAO = new TipoMovimentacaoDAO();
+                TipoMovimentacaoModel tipo = tipoMovimentacaoDAO.readId(rs.getInt("id_tipo"));
 
                 MovimentacaoModel m = new MovimentacaoModel(id, qtd, data, funcionario, produto, tipo);
                 movimentacoes.add(m);

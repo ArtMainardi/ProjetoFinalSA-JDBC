@@ -46,6 +46,24 @@ public class TipoMovimentacaoDAO {
        return lista;
     }
 
+    // READ (ID):
+    public TipoMovimentacaoModel readId(int id)throws SQLException{
+       String sql = "SELECT * FROM produtos where id_tipo = ?";
+       
+       try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);){
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int id_tipo = rs.getInt("id_tipo");
+                String tipo = rs.getString("tipo");
+
+                return new TipoMovimentacaoModel(id_tipo, tipo);
+            }
+       }
+       return null;
+    }
+
     // UPDATE:
     public boolean update(TipoMovimentacaoModel t) throws SQLException {
         String sql = "UPDATE tipo_movimentacao SET tipo = ? WHERE id = ?";

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class conexao {
+public class Conexao {
     public static final String url = "";
     public static final String user = "avnadmin";
     public static final String password = "";
