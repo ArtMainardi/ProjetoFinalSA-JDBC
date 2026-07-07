@@ -5,7 +5,7 @@ import ProjetoSA.repository.TipoMovimentacaoDAO;
 import java.sql.SQLException;
 import java.util.List;
 
-public class TipoMovimentaçãoService {
+public class TipoMovimentacaooService {
     // Cria objeto DAO para podermos usar seus métodos:
     private TipoMovimentacaoDAO repository = new TipoMovimentacaoDAO();
 
@@ -33,5 +33,16 @@ public class TipoMovimentaçãoService {
     // Listar:
     public List<TipoMovimentacaoModel> listar() throws SQLException{
         return repository.read();
+    }
+
+    // Buscar:
+    public TipoMovimentacaoModel buscar(int id) throws SQLException{
+        TipoMovimentacaoModel objeto = repository.readId(id);
+
+        // Verifica se encontrou o objeto:
+        if(objeto == null){
+            throw new RuntimeException("ERRO: objeto com esse ID não encontrado!");
+        }
+        return objeto;
     }
 }
