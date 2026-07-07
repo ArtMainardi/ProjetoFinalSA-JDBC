@@ -51,22 +51,19 @@ public class FuncionarioService {
         return funcionario;
      }
 
-     
+     public FuncionarioModel buscarEmail(String email) throws SQLException{
+        FuncionarioModel funcionario = repository.readEmail(email);
 
+        if(email.trim().isEmpty()){
+            throw new RuntimeException("ERRO: email não pode ser vazio!");
+        }
+        if(funcionario == null){
+            throw new RuntimeException("ERRO: funcionário com esse email não encontrado!");
+        }
 
+        return funcionario;
+     }
 
-    // Buscar (ID):
-    /*
-    - Fazer verificação do atributo {id} com 'if(* < 0)'
-    - Fazer verificação se encontrou o objeto com 'if(* == null)'
-    */
-
-    // Buscar (EMAIL):
-    /*
-    - Criação do método: 'public FuncionarioModel buscarEmail(String email)''
-    - Fazer verificação do atributo {email} com 'if(*.trim().isEmpty())'
-    - Fazer verificação se encontrou o objeto com 'if(* == null)'
-    */
 
     // Atualizar:
     /*
