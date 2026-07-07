@@ -23,7 +23,13 @@ public class TipoMovimentacaooService {
 
     // Listar:
     public List<TipoMovimentacaoModel> listar() throws SQLException{
-        return repository.read();
+        List<TipoMovimentacaoModel> lista = repository.read();
+
+        // Verifica se encontrou algum dado:
+        if(lista.isEmpty()){
+            throw new RuntimeException("Nenhum tipo de movimentação salvo no banco de dados!");
+        }
+        return lista;
     }
 
     // Buscar:
