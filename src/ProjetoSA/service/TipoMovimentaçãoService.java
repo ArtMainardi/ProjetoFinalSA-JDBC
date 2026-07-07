@@ -2,6 +2,8 @@ package ProjetoSA.service;
 
 import ProjetoSA.model.TipoMovimentacaoModel;
 import ProjetoSA.repository.TipoMovimentacaoDAO;
+import java.sql.SQLException;
+import java.util.List;
 
 public class TipoMovimentaçãoService {
     // Cria objeto DAO para podermos usar seus métodos:
@@ -26,5 +28,10 @@ public class TipoMovimentaçãoService {
         }
         // Retorna a mensagem:
         return message;
+    }
+
+    // Listar:
+    public List<TipoMovimentacaoModel> listar() throws SQLException{
+        return repository.read();
     }
 }
