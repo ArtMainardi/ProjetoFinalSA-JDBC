@@ -61,4 +61,13 @@ public class TipoMovimentacaooService {
             throw new RuntimeException("ERRO: algo deu de errado");
         }
     }
+
+    // Deletar:
+    public void deletar(int id) throws SQLException{
+        // Verifica se encontrou o objeto:
+        TipoMovimentacaoModel objeto = repository.readId(id);
+        if(objeto == null){
+            throw new RuntimeException("ERRO: objeto com esse ID não encontrado!");
+        }
+    }
 }
