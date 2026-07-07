@@ -1,9 +1,11 @@
-import connection.Conexao;
+package ProjetoSA;
+import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.FuncionarioModel;
+import ProjetoSA.service.FuncionarioDAO;
+import ProjetoSA.util.MovimentacaoMain;
+import ProjetoSA.util.Style;
 import java.sql.SQLException;
 import java.util.Scanner;
-import model.FuncionarioModel;
-import util.MovimentacaoMain;
-import util.Style;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);

@@ -1,4 +1,4 @@
-package model;
+package ProjetoSA.model;
 
 public class FuncionarioModel {
     private int id_funcionario;

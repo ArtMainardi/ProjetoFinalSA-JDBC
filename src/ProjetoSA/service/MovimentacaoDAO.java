@@ -1,3 +1,4 @@
+package ProjetoSA.service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -5,10 +6,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import model.FuncionarioModel;
-import model.MovimentacaoModel;
-import model.ProdutoModel;
-import model.TipoMovimentacaoModel;
+import ProjetoSA.model.FuncionarioModel;
+import ProjetoSA.model.MovimentacaoModel;
+import ProjetoSA.model.ProdutoModel;
+import ProjetoSA.model.TipoMovimentacaoModel;
 
 public class MovimentacaoDAO {
     private Connection conexao;

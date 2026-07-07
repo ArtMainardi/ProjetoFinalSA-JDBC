@@ -1,4 +1,4 @@
-package util;
+package ProjetoSA.util;
 
 import java.util.Scanner;
 

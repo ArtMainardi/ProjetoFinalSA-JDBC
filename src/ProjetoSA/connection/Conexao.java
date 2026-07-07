@@ -1,4 +1,4 @@
-package connection;
+package ProjetoSA.connection;
 
 import java.io.FileInputStream;
 import java.io.IOException;

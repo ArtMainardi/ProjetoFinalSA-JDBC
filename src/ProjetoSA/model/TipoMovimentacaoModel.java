@@ -1,4 +1,4 @@
-package model;
+package ProjetoSA.model;
 
 public class TipoMovimentacaoModel{
     private int id_tipo;
