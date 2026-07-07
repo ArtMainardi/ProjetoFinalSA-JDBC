@@ -56,7 +56,7 @@ public class TipoMovimentacaooService {
             throw new RuntimeException("ERRO: objeto com esse ID não encontrado!");
         }
         
-        // Verifica o retorno booleano do 'crate()':
+        // Verifica o retorno booleano do 'update()':
         if(!repository.update(modifiedObjeto)){
             throw new RuntimeException("ERRO: algo deu de errado");
         }
