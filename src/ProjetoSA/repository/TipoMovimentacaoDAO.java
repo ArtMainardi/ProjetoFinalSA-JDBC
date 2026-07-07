@@ -1,4 +1,4 @@
-package ProjetoSA.service;
+package ProjetoSA.repository;
 import ProjetoSA.connection.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

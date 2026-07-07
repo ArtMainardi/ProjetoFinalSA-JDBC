@@ -1,7 +1,7 @@
 package ProjetoSA;
 import ProjetoSA.connection.Conexao;
 import ProjetoSA.model.FuncionarioModel;
-import ProjetoSA.service.FuncionarioDAO;
+import ProjetoSA.repository.FuncionarioDAO;
 import ProjetoSA.util.MovimentacaoMain;
 import ProjetoSA.util.Style;
 import java.sql.SQLException;
