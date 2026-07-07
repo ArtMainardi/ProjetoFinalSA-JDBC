@@ -2,6 +2,8 @@ import connection.Conexao;
 import java.sql.SQLException;
 import java.util.Scanner;
 import model.FuncionarioModel;
+import util.MovimentacaoMain;
+import util.Style;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
@@ -14,17 +16,19 @@ public class Main {
         login();
 
         // Menu de opções:
-        sty.titulo("Gerenciador de Movimentação de Almoxarifado");
-        System.out.println("Digite uma opção: \n"
-                        + "1- Movimentações \n"
-                        + "2- Produtos"
-                        + (usuarioAtual.isAdmin() ? "3- Funcionários \n" : "")
-                        + "0- Sair");
-        int option = sc.nextInt();
+        int option;
         do{
+            sty.titulo("Gerenciador de Movimentação de Almoxarifado");
+            System.out.println("Digite uma opção: \n"
+                            + "1- Movimentações \n"
+                            + "2- Produtos \n"
+                            + (usuarioAtual.isAdmin() ? "3- Funcionários \n" : "")
+                            + "0- Sair");
+            option = sc.nextInt();
             try{
                 switch (option) {
                     case 1:
+                        MovimentacaoMain.main(sty, sc);
                         break;
                     case 2:
                         break;
@@ -34,6 +38,8 @@ public class Main {
                         } else{
                         }
                         break;
+                    case 0:
+                        break;
                     default:
                         throw new Exception("ERRO: opção digitada inválida!");
                 }
@@ -42,6 +48,9 @@ public class Main {
                 continuar();
             }
         } while(option != 0);
+
+        sty.quadro("Finalizando programa ...");
+        System.out.println("Programa finalizado!");
     }
 
     // Procedimento para testar conexão com o BD:
