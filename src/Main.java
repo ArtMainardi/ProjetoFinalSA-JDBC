@@ -11,7 +11,9 @@ public class Main {
     static FuncionarioModel usuarioAtual = new FuncionarioModel();
 
     public static void main(String[] args) throws SQLException{
-        testarConexao();
+        if(!testarConexao()){
+            return;
+        }
         clear();
         login();
 
@@ -54,20 +56,21 @@ public class Main {
     }
 
     // Procedimento para testar conexão com o BD:
-    public static void testarConexao(){
+    public static boolean testarConexao(){
         // Verifica conexão com o banco de dados:
         sty.titulo("Testando conexão");
         Conexao teste = new Conexao();
         if(!teste.testar()){
             System.out.println(); // Espaçamento
             continuar();
-            return;
+            return false;
         }
         System.out.println(); // Espaçamento
         continuar();
+        return true;
     }
 
-    // Procedimento para tela de login (BETA):
+    // Procedimento para tela de login:
     public static void login() throws SQLException{
         FuncionarioDAO service = new FuncionarioDAO();
         boolean verify = false;
