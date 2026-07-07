@@ -1,5 +1,6 @@
 package ProjetoSA.repository;
 import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.TipoMovimentacaoModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import ProjetoSA.model.TipoMovimentacaoModel;
 
 public class TipoMovimentacaoDAO {
     Conexao conexao = new Conexao();
