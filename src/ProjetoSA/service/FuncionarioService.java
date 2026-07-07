@@ -3,7 +3,6 @@ package ProjetoSA.service;
 
 import java.sql.SQLException;
 import java.util.List;
-
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.repository.FuncionarioDAO;
 
@@ -29,7 +28,7 @@ public class FuncionarioService {
         }
     }
 
-    
+
      public List<FuncionarioModel> listar() throws SQLException{
         List<FuncionarioModel> lista = repository.read();
 
@@ -39,6 +38,21 @@ public class FuncionarioService {
         }
         return lista;
      }
+
+     public FuncionarioModel buscarID(int id_funcionario) throws SQLException{
+        FuncionarioModel funcionario = repository.readId(id_funcionario);
+
+        if(id_funcionario < 0){
+            throw new RuntimeException("ERRO: funcionário com ID negativo");
+        }
+        if(funcionario == null){
+            throw new RuntimeException("ERRO: funcionário com esse ID não encontrado!");
+        }
+        return funcionario;
+     }
+
+     
+
 
 
     // Buscar (ID):
