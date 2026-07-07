@@ -42,4 +42,23 @@ public class TipoMovimentacaooService {
         }
         return objeto;
     }
+
+    // Atualizar:
+    public void atualizar(TipoMovimentacaoModel modifiedObjeto) throws SQLException{
+        // Verifica o atributo 'tipo':
+        if(modifiedObjeto.getTipo().trim().isEmpty()){
+            throw new RuntimeException("ERRO: nenhum dado do objeto pode ser vazio!");
+        }
+
+        // Verifica se encontrou o objeto:
+        TipoMovimentacaoModel objeto = repository.readId(modifiedObjeto.getId_tipo());
+        if(objeto == null){
+            throw new RuntimeException("ERRO: objeto com esse ID não encontrado!");
+        }
+        
+        // Verifica o retorno booleano do 'crate()':
+        if(!repository.update(modifiedObjeto)){
+            throw new RuntimeException("ERRO: algo deu de errado");
+        }
+    }
 }
