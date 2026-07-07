@@ -1,20 +1,45 @@
 package ProjetoSA.service;
 
+
+import java.sql.SQLException;
+import java.util.List;
+
+import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.repository.FuncionarioDAO;
 
 public class FuncionarioService {
     private FuncionarioDAO repository = new FuncionarioDAO();
 
-    // Salvar:
-    /*
-    - Fazer verificação dos atributos {nome_funcionario, email_funcionario, senha_funcionario} com 'if(*.trim().isEmpty())'
-    - Fazer verificação do retorno booleano do 'create()' do repository
-    */
 
-    // Listar:
-    /*
-    - Fazer verificação se encontrou algum dado com 'if(*.isEmpty())'
-    */
+    public void salvar(FuncionarioModel funcionario) throws SQLException{
+        if(funcionario.getNome_funcionario().trim().isEmpty()){
+            throw new RuntimeException("ERRO: Nenhum dado do funcionário pode ser vazio!");
+        }
+
+        if(funcionario.getEmail_funcionario().trim().isEmpty()){
+            throw new RuntimeException("ERRO: Nenhum dado do funcionário pode ser vazio!");
+        }
+
+        if(funcionario.getSenha_funcionario().trim().isEmpty()){
+            throw new RuntimeException("ERRO: Nenhum dado do funcionário pode ser vazio!");
+        }
+
+        if(!repository.create(funcionario)){
+            throw new RuntimeException("ERRO: Algo deu errado!");
+        }
+    }
+
+    
+     public List<FuncionarioModel> listar() throws SQLException{
+        List<FuncionarioModel> lista = repository.read();
+
+        if(lista.isEmpty()){
+            throw new RuntimeException("Nenhum funcionário salvo no banco de dados!");
+
+        }
+        return lista;
+     }
+
 
     // Buscar (ID):
     /*
