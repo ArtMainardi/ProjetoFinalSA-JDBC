@@ -64,14 +64,29 @@ public class FuncionarioService {
         return funcionario;
      }
 
+     public void atualizar(FuncionarioModel modifiedFuncionario) throws SQLException{
+        
+        if(modifiedFuncionario.getNome_funcionario().trim().isEmpty()){
+            throw new RuntimeException("ERRO: nenhum dado do funcionário pode ser vazio");
+        }
 
-    // Atualizar:
-    /*
-    - Fazer verificação do atributo {id} com 'if(* < 0)'
-    - Fazer verificação dos atributos {nome_funcionario, email_funcionario, senha_funcionario} com 'if(*.trim().isEmpty())'
-    - Fazer verificação se encontrou o objeto com 'if(* == null)'
-    - Fazer verificação do retorno booleano do 'update()' do repository
-    */
+        if(modifiedFuncionario.getEmail_funcionario().trim().isEmpty()){
+            throw new RuntimeException("ERRO: nenhum dado do funcionário pode ser vazio");
+        }
+        if(modifiedFuncionario.getSenha_funcionario().trim().isEmpty()){
+            throw new RuntimeException("ERRO: nenhum dado do funcionário pode ser vazio");
+        }
+
+        FuncionarioModel funcionario = repository.readId(modifiedFuncionario.getId_funcionario());
+        if(funcionario == null){
+            throw new RuntimeException("ERRO: funcionário com esse ID não encontrado!");
+        }
+
+        if(!repository.update(modifiedFuncionario)){
+            throw new RuntimeException("ERRO: algo deu errado!");
+        }
+     }
+
 
     // Desativar/Ativar:
     /*
