@@ -9,7 +9,7 @@ import ProjetoSA.repository.FuncionarioDAO;
 public class FuncionarioService {
     private FuncionarioDAO repository = new FuncionarioDAO();
 
-
+    // Salvar
     public void salvar(FuncionarioModel funcionario) throws SQLException{
         if(funcionario.getNome_funcionario().trim().isEmpty()){
             throw new RuntimeException("ERRO: Nenhum dado do funcionário pode ser vazio!");
@@ -28,7 +28,7 @@ public class FuncionarioService {
         }
     }
 
-
+    // Listar
      public List<FuncionarioModel> listar() throws SQLException{
         List<FuncionarioModel> lista = repository.read();
 
@@ -39,6 +39,7 @@ public class FuncionarioService {
         return lista;
      }
 
+     // Buscar ID
      public FuncionarioModel buscarID(int id_funcionario) throws SQLException{
         FuncionarioModel funcionario = repository.readId(id_funcionario);
 
@@ -51,6 +52,7 @@ public class FuncionarioService {
         return funcionario;
      }
 
+     // Buscar Email
      public FuncionarioModel buscarEmail(String email) throws SQLException{
         FuncionarioModel funcionario = repository.readEmail(email);
 
@@ -64,6 +66,7 @@ public class FuncionarioService {
         return funcionario;
      }
 
+     // Atualizar
      public void atualizar(FuncionarioModel modifiedFuncionario) throws SQLException{
         
         if(modifiedFuncionario.getNome_funcionario().trim().isEmpty()){
@@ -88,14 +91,25 @@ public class FuncionarioService {
      }
 
 
-    // Desativar/Ativar:
-    /*
-    - Criação do método: 'public boolean desativarOuAtivar(int id, boolean estado)'
-    - Fazer verificação do atributo {id} com 'if(* < 0)'
-    - Fazer verificação se encontrou o objeto com 'TipoMovimentacaoModel objeto = repository.readId(id)' e 'if(* == null)'
-    - Fazer verificação com 'if(objeto.isAtivo() == estado){ throw new RuntimeException("ERRO: o objeto com esse ID já está " + (estado ? "ativo" : "desativo") + "!"); }'
-    - Fazer verificação do retorno booleano do 'desativarOuAtivar()' do repository
-    */
+     // Desativar ou Ativar
+     public boolean desativarOuAtivar(int id, boolean estado) throws SQLException{
+        if(id < 0){
+            throw new RuntimeException("ERRO: funcionário com ID negativo!");
+        }
+        FuncionarioModel funcionario = repository.readId(id);
+            if(funcionario == null){
+                throw new RuntimeException("ERRO: funcionário com esse ID não encontrado!");
+            }
+            if(funcionario.isAtivo() == estado){
+                throw new RuntimeException("ERRO: o objeto com esse ID já está " + (estado ? "ativo" : "desativo") + "!");
+            }
+            if(!repository.desativarOuAtivar(id, estado)){
+                throw new RuntimeException("ERRO: algo deu errado!");
+            }
+             return estado;
+     }
+
+
 
     // Verificar email:
     /*
