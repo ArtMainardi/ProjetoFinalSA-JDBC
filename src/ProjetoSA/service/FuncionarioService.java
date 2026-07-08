@@ -109,14 +109,16 @@ public class FuncionarioService {
              return estado;
      }
 
-
-
-    // Verificar email:
-    /*
-    - Criação do método: 'public boolean verificarEmail(String email)'
-    - Fazer verificação do atributo {email} com 'if(*.trim().isEmpty())'
-    - Retornar 'return repository.verificarEmail(email);'
-    */
+     // Verificar email
+     public boolean verificarEmail(String email) throws SQLException{
+        if(email.trim().isEmpty()){
+            throw new RuntimeException("ERRO: email não pode ser vazio");
+        }
+       
+        return repository.verificarEmail(email);
+     }
+     
+    
 
     // Verificar senha:
     /*
