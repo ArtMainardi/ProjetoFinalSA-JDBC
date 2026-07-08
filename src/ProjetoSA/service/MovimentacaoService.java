@@ -59,8 +59,22 @@ public class MovimentacaoService {
         return m;
     }
     public void atualizar(MovimentacaoModel m){
-        if(){
-            
+        if(m.getQtd_movimentacao() <= 0){
+            throw new RuntimeException("Erro: A quantidade para atualização deve ser maior que zero");
+        }
+        if(m.getData_movimentacao() == null){
+            throw new RuntimeException("Erro: A data não pode ser nula");
+        }
+        try {
+            if(repository.buscarPorId(m.getId_movimentacao())== null){
+                throw new RuntimeException("Erro: Não é possível atualizar uma movimentação inexistente");
+            }
+            repository.atualizar(m);
+        } catch (Exception re) {
+            throw re;
+        } catch (Exception e){
+            throw new RuntimeException("Erro: Falha ao atualizar a movimentação no banco de dados")
+
         }
     }
 }
