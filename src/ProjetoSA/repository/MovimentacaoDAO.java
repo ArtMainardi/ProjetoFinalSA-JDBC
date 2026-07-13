@@ -116,7 +116,7 @@ public class MovimentacaoDAO {
     }
 
     // UPDATE:
-    public void update(MovimentacaoModel m) throws SQLException {
+    public MovimentacaoModel update(MovimentacaoModel m) throws SQLException {
         String sql = "UPDATE Movimentacao SET qtd_movimentacao = ?, data_movimentacao = ?, id_funcionario = ?, id_produto = ?, id_tipo = ? WHERE id_movimentacao = ?";
         
         // Faz a conexão e prepara a query:
@@ -129,8 +129,14 @@ public class MovimentacaoDAO {
             stmt.setInt(5, m.getTipo().getId_tipo());
             stmt.setInt(6, m.getId_movimentacao()); 
             
-            // Executa a query:
-            stmt.executeUpdate();
+            // Executa e guarda a quantidade de linhas afetadas
+            int linhasAfetadas = stmt.executeUpdate();
+            
+            // Verifica se atualizou:
+            if (linhasAfetadas == 0) {
+                return null;
+            }
+            return m;
         }
     }
 
