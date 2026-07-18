@@ -109,41 +109,44 @@ public class ProdutoDAO {
             // Verifica se atualizou:
             if(linhasAfetadas == 0){
                 return null;
-            }else {
-                return false;
             }
         }
+        return produtoModificado;
     }
 
     // DELETE (DESATIVAR):
     public boolean desativar(int id) throws SQLException{
         String sql = "UPDATE Produto SET ativo = false WHERE id_produto = ?";
 
+        // Faz a conexão e prepara a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            // Define os dados da query:
             stmt.setInt(1, id);
             int linhasAfetadas = stmt.executeUpdate();
 
-            if(linhasAfetadas > 0){
-                return true;
-            }else {
+            // Verifica se atualizou:
+            if(linhasAfetadas == 0){
                 return false;
             }
         }
+        return true;
     }
 
     // DELETE (ATIVAR):
     public boolean ativar (int id) throws SQLException {
         String sql = "UPDATE Produto SET ativo = true WHERE id_produto = ?";
 
+        // Faz a conexão e prepara a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            // Define os dados da query:
             stmt.setInt(1, id);
             int linhasAfetadas = stmt.executeUpdate();
 
-            if(linhasAfetadas > 0){
-                return true;
-            }else {
+            // Verifica se atualizou:
+            if(linhasAfetadas == 0){
                 return false;
             }
         }
+        return true;
     }
 }
