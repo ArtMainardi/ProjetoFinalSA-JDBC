@@ -4,6 +4,7 @@ package ProjetoSA.service;
 import java.sql.SQLException;
 import java.util.List;
 import ProjetoSA.model.FuncionarioModel;
+import ProjetoSA.model.TipoMovimentacaoModel;
 import ProjetoSA.repository.FuncionarioDAO;
 
 public class FuncionarioService {
@@ -119,12 +120,20 @@ public class FuncionarioService {
      }
      
     
+     public boolean verificarSenha(String senha, String email) throws SQLException{
+        if(email.trim().isEmpty()){
+            throw new RuntimeException("ERRO: email não pode ser vazio!");
+        }
+        if(senha.trim().isEmpty()){
+            throw new RuntimeException("ERRO: senha não pode ser vazia");
+        }
+        FuncionarioModel objeto = repository.readEmail(email);
 
-    // Verificar senha:
-    /*
-    - Criação do método: 'public boolean verificarSenha(String senha, String email)'
-    - Fazer verificação dos atributos {senha, email} com 'if(*.trim().isEmpty())'
-    - Fazer verificação se encontrou o objeto com 'TipoMovimentacaoModel objeto = repository.readEmail(email)' e 'if(* == null)'
-    - Retornar 'return repository.verificarSenha(senha, email);'
-    */
+        if(objeto == null){
+            throw new RuntimeException("ERRO: algo deu errado!");
+        }
+
+        return repository.verificarSenha(senha, email);
+     }
+
 }
