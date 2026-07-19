@@ -18,7 +18,6 @@ public class MovimentacaoDAO {
 
     // CREATE:
     public MovimentacaoModel create(MovimentacaoModel m) throws SQLException {
-        MovimentacaoModel movimentacao = null;
         String sql = "INSERT INTO Movimentacao (qtd_movimentacao, data_movimentacao, id_funcionario, id_produto, id_tipo) VALUES (?, ?, ?, ?, ?)";
         
         // Faz a conexão e prepara a query:
