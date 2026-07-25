@@ -76,4 +76,14 @@ public class MovimentacaoService {
         }
         return repository.update(m);
     }
+
+    // Ativar/Desativar (soft delete):
+    public boolean desativarOuAtivar(int id, boolean estado) throws SQLException{
+        // Valida o ID informado:
+        if(id < 0 || repository.readId(id) == null){
+            throw new RuntimeException("Erro: ID informado inválido");
+        }
+        // Manda a requisição para o repository:
+        return repository.desativarOuAtivar(id, estado);
+    }
 }
