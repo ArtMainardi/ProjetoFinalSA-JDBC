@@ -139,16 +139,23 @@ public class MovimentacaoDAO {
         }
     }
 
-    // DELETE:
-    public void deletar(int id) throws SQLException {
-        String sql = "DELETE FROM Movimentacao WHERE id_movimentacao = ?";
+    // ATIVAR/DESATIVAR (SOFT DELETE):
+    public boolean desativarOuAtivar(int id, boolean estado) throws SQLException {
+        String sql = "UPDATE FROM Movimentacao SET ativo = ? WHERE id_movimentacao = ?";
         
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {
             // Define os dados da query:
-            stmt.setInt(1, id);
-            // Executa a query:
-            stmt.executeUpdate();
+            stmt.setBoolean(1, estado);
+            stmt.setInt(2, id);
+
+            // Executa a query e verifica se atualizou o dado::
+            int linhas = stmt.executeUpdate();
+            if(linhas == 0){
+                return false;
+            } else{
+                return true;
+            }
         }
     }
 }
