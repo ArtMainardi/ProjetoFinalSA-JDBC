@@ -9,6 +9,7 @@ public class MovimentacaoModel {
     private FuncionarioModel funcionario;
     private ProdutoModel produto;
     private TipoMovimentacaoModel tipo;
+    private boolean ativo = true;
 
     public MovimentacaoModel(int id_movimentacao, int qtd_movimentacao, LocalDate data_movimentacao, FuncionarioModel funcionario, ProdutoModel produto, TipoMovimentacaoModel tipo) {
         this.id_movimentacao = id_movimentacao;
