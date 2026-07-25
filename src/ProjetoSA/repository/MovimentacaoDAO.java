@@ -140,7 +140,7 @@ public class MovimentacaoDAO {
     }
 
     // ATIVAR/DESATIVAR (SOFT DELETE):
-    public boolean deletar(int id, boolean estado) throws SQLException {
+    public boolean desativarOuAtivar(int id, boolean estado) throws SQLException {
         String sql = "UPDATE FROM Movimentacao SET ativo = ? WHERE id_movimentacao = ?";
         
         // Faz a conexão e prepara a query:
