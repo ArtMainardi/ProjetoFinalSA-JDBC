@@ -61,8 +61,7 @@ public class Main {
     public static boolean testarConexao(){
         // Verifica conexão com o banco de dados:
         sty.titulo("Testando conexão");
-        Conexao teste = new Conexao();
-        if(!teste.testar()){
+        if(!Conexao.testar()){
             System.out.println(); // Espaçamento
             continuar();
             return false;
