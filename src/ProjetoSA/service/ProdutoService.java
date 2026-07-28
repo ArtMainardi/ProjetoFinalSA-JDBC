@@ -9,7 +9,7 @@ public class ProdutoService {
     private ProdutoDAO repository = new ProdutoDAO();
 
     // Salvar
-    public void salvar(ProdutoModel produto) throws SQLException{
+    public ProdutoModel salvar(ProdutoModel produto) throws SQLException{
         // Verifica 'nome' do produto:
         if(produto.getNome_produto().trim().isEmpty()){
             throw new RuntimeException("ERRO: Nenhum dado do produto pode ser vazio!");
@@ -23,7 +23,7 @@ public class ProdutoService {
             throw new RuntimeException("ERRO: quantidade mínima do produto não pode ser negativa!");
         }
         // Manda requisição para o repository:
-        repository.create(produto);
+        return repository.create(produto);
     }
 
     // Listar
@@ -53,7 +53,7 @@ public class ProdutoService {
     }
 
      // Atualizar
-    public void atualizar(ProdutoModel modifiedProduto) throws SQLException{
+    public ProdutoModel atualizar(ProdutoModel modifiedProduto) throws SQLException{
         //  Verifica 'nome' do produto:
         if(modifiedProduto.getNome_produto().trim().isEmpty()){
             throw new RuntimeException("ERRO: nenhum dado do produto pode ser vazio!");
@@ -71,11 +71,11 @@ public class ProdutoService {
             throw new RuntimeException("ERRO: produto com esse ID não encontrado!");
         }
         // Manda a rquisição para o repository:
-        repository.update(modifiedProduto);
+        return repository.update(modifiedProduto);
     }
 
     // Desativar ou Ativar
-    public void desativarOuAtivar(int id, boolean estado) throws SQLException{
+    public boolean desativarOuAtivar(int id, boolean estado) throws SQLException{
         // Verifica integridade do ID:
         if(id < 0){
             throw new RuntimeException("ERRO: produto com ID negativo!");
@@ -90,6 +90,6 @@ public class ProdutoService {
             throw new RuntimeException("ERRO: o objeto com esse ID já está " + (estado ? "ativo" : "desativo") + "!");
         }
         // Manda a requisição para o repository:
-        repository.desativarOuAtivar(id, estado);
+        return repository.desativarOuAtivar(id, estado);
     }
 }
