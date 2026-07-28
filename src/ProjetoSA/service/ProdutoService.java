@@ -1,10 +1,9 @@
 package ProjetoSA.service;
 
-
-import java.sql.SQLException;
-import java.util.List;
 import ProjetoSA.model.ProdutoModel;
 import ProjetoSA.repository.ProdutoDAO;
+import java.sql.SQLException;
+import java.util.List;
 
 public class ProdutoService {
     private ProdutoDAO repository = new ProdutoDAO();
@@ -91,10 +90,6 @@ public class ProdutoService {
             throw new RuntimeException("ERRO: o objeto com esse ID já está " + (estado ? "ativo" : "desativo") + "!");
         }
         // Manda a requisição para o repository:
-        if(estado){
-            repository.ativar(id);
-        } else{
-            repository.desativar(id);
-        }
+        repository.desativarOuAtivar(id, estado);
     }
 }
