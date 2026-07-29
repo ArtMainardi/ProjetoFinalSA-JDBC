@@ -10,14 +10,14 @@ public class FuncionarioService {
     private FuncionarioDAO repository = new FuncionarioDAO();
 
     // Salvar:
-    public void salvar(FuncionarioModel funcionario) throws SQLException{
+    public FuncionarioModel salvar(FuncionarioModel funcionario) throws SQLException{
         // Verifica integridade de dados:
         if(funcionario.getNome_funcionario().trim().isEmpty() || funcionario.getEmail_funcionario().trim().isEmpty()
                 || funcionario.getSenha_funcionario().trim().isEmpty()){
             throw new RuntimeException("ERRO: Nenhum dado do funcionário pode ser vazio!");
         }
         // Manda a requisição para o repository:
-        repository.create(funcionario);
+        return repository.create(funcionario);
     }
 
     // Listar:
@@ -63,7 +63,7 @@ public class FuncionarioService {
     }
 
     // Atualizar
-    public void atualizar(FuncionarioModel modifiedFuncionario) throws SQLException{
+    public FuncionarioModel atualizar(FuncionarioModel modifiedFuncionario) throws SQLException{
         // Verifica integridade de dados:
         if(modifiedFuncionario.getNome_funcionario().trim().isEmpty() || modifiedFuncionario.getEmail_funcionario().trim().isEmpty()
                 || modifiedFuncionario.getSenha_funcionario().trim().isEmpty()){
@@ -72,9 +72,8 @@ public class FuncionarioService {
         // Verifica se encontrou algum dado com esse ID:
         buscarID(modifiedFuncionario.getId_funcionario());
         // Manda a requisição para o repository:
-        repository.update(modifiedFuncionario);
+        return repository.update(modifiedFuncionario);
     }
-
 
     // Desativar ou Ativar (soft delete):
     public boolean desativarOuAtivar(int id, boolean estado) throws SQLException{
