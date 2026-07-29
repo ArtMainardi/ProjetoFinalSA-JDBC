@@ -20,7 +20,7 @@ public class Conexao {
         return props;
     }
     
-    public static Connection conectar() throws SQLException{
+    public Connection conectar() throws SQLException{
         Properties props = carregarPropriedades();
         
         // Pega os valores usando as chaves exatas que você definiu no arquivo
@@ -35,7 +35,7 @@ public class Conexao {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public boolean testar() {
+    public static boolean testar() {
         try {
             Properties props = carregarPropriedades();
             
