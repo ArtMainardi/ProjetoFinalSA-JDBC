@@ -114,39 +114,23 @@ public class ProdutoDAO {
         return produtoModificado;
     }
 
-    // DELETE (DESATIVAR):
-    public boolean desativar(int id) throws SQLException{
-        String sql = "UPDATE Produto SET ativo = false WHERE id_produto = ?";
-
+    // ATIVAR/DESATIVAR (SOFT DELETE):
+    public boolean desativarOuAtivar(int id, boolean estado) throws SQLException {
+        String sql = "UPDATE FROM Produto SET ativo = ? WHERE id_produto = ?";
+        
         // Faz a conexão e prepara a query:
-        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {
             // Define os dados da query:
-            stmt.setInt(1, id);
-            int linhasAfetadas = stmt.executeUpdate();
+            stmt.setBoolean(1, estado);
+            stmt.setInt(2, id);
 
-            // Verifica se atualizou:
-            if(linhasAfetadas == 0){
+            // Executa a query e verifica se atualizou o dado:
+            int linhas = stmt.executeUpdate();
+            if(linhas == 0){
                 return false;
+            } else{
+                return true;
             }
         }
-        return true;
-    }
-
-    // DELETE (ATIVAR):
-    public boolean ativar (int id) throws SQLException {
-        String sql = "UPDATE Produto SET ativo = true WHERE id_produto = ?";
-
-        // Faz a conexão e prepara a query:
-        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
-            // Define os dados da query:
-            stmt.setInt(1, id);
-            int linhasAfetadas = stmt.executeUpdate();
-
-            // Verifica se atualizou:
-            if(linhasAfetadas == 0){
-                return false;
-            }
-        }
-        return true;
     }
 }
