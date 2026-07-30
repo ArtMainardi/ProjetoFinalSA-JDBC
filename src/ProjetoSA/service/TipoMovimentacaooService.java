@@ -10,15 +10,13 @@ public class TipoMovimentacaooService {
     private TipoMovimentacaoDAO repository = new TipoMovimentacaoDAO();
 
     // Salvar:
-    public void salvar(TipoMovimentacaoModel objeto) throws SQLException{
+    public TipoMovimentacaoModel salvar(TipoMovimentacaoModel objeto) throws SQLException{
         // Verifica o atributo 'tipo':
         if(objeto.getTipo().trim().isEmpty()){
             throw new RuntimeException("ERRO: nenhum dado do objeto pode ser vazio!");
         }
-        // Verifica o retorno booleano do 'crate()':
-        if(!repository.create(objeto)){
-            throw new RuntimeException("ERRO: algo deu de errado");
-        }
+        // Manda a requisição para o repository:
+        return repository.create(objeto);
     }
 
     // Listar:
@@ -44,7 +42,7 @@ public class TipoMovimentacaooService {
     }
 
     // Atualizar:
-    public void atualizar(TipoMovimentacaoModel modifiedObjeto) throws SQLException{
+    public TipoMovimentacaoModel atualizar(TipoMovimentacaoModel modifiedObjeto) throws SQLException{
         // Verifica o atributo 'tipo':
         if(modifiedObjeto.getTipo().trim().isEmpty()){
             throw new RuntimeException("ERRO: nenhum dado do objeto pode ser vazio!");
@@ -56,10 +54,8 @@ public class TipoMovimentacaooService {
             throw new RuntimeException("ERRO: objeto com esse ID não encontrado!");
         }
         
-        // Verifica o retorno booleano do 'update()':
-        if(!repository.update(modifiedObjeto)){
-            throw new RuntimeException("ERRO: algo deu de errado");
-        }
+        // Manda a requisição para o repository:
+        return repository.update(modifiedObjeto);
     }
 
     // Deletar:
@@ -69,5 +65,7 @@ public class TipoMovimentacaooService {
         if(objeto == null){
             throw new RuntimeException("ERRO: objeto com esse ID não encontrado!");
         }
+        // Manda a requisição para o repository:
+        repository.delete(id);
     }
 }
