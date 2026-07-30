@@ -1,6 +1,7 @@
 package ProjetoSA.util;
 
 import ProjetoSA.Main;
+import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.service.FuncionarioService;
 import java.util.Scanner;
 
@@ -37,8 +38,6 @@ public class FuncionarioMain {
                     case 4:
                         break;
                     case 5:
-                        break;
-                    case 6:
                         System.out.println("Saindo...");
                         break;
                     default:
@@ -49,6 +48,31 @@ public class FuncionarioMain {
             }
             Main.continuar();
             Main.clear();
-        } while (opcao != 6);
+        } while (opcao != 5);
+    }
+    //metodo que vai cadastrar funcionarios
+    public static void salvar(){
+        try {
+            Main.clear();
+            sty.titulo("Cadastrar Funcionario");
+
+            System.out.print("Nome: ");
+            String nome = sc.nextLine().trim();
+            System.out.print("Email: ");
+            String email = sc.nextLine().trim();
+            System.out.print("Senha: ");
+            String senha = sc.nextLine().trim();
+            System.out.print("É administrador? (1 - Sim / 2 - Não): ");
+            int opcaoAdmin = Integer.parseInt(sc.nextLine().trim());
+            boolean isAdmin = (opcaoAdmin == 1);
+            
+            // O funcionário já começa ativo (true).
+            FuncionarioModel novoFuncionario = new FuncionarioModel(nome, email, senha, isAdmin, true);
+            service.salvar(novoFuncionario);
+            
+            sty.quadro("Funcionário cadastrado com sucesso!");
+        } catch (Exception e) {
+            sty.quadro("Erro ao cadastrar: " + e.getMessage());
+        }
     }
 }
