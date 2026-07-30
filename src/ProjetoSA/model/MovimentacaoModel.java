@@ -19,12 +19,9 @@ public class MovimentacaoModel {
         this.produto = produto;
         this.tipo = tipo;
     }
-    public MovimentacaoModel(int qtd_movimentacao, LocalDate data_movimentacao, FuncionarioModel funcionario, ProdutoModel produto, TipoMovimentacaoModel tipo) {
+    // Construtor para cadastro:
+    public MovimentacaoModel(int qtd_movimentacao) {
         this.qtd_movimentacao = qtd_movimentacao;
-        this.data_movimentacao = data_movimentacao;
-        this.funcionario = funcionario;
-        this.produto = produto;
-        this.tipo = tipo;
     }
 
 

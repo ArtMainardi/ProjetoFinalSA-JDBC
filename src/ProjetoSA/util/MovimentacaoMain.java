@@ -1,5 +1,7 @@
 package ProjetoSA.util;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,6 +35,7 @@ public class MovimentacaoMain {
                         mostrarHistorico();
                         break;
                     case 2:
+                        cadastrar();
                         break;
                     case 0:
                         break;
@@ -59,6 +62,35 @@ public class MovimentacaoMain {
             for(MovimentacaoModel m : movimentacoes){
                 sty.quadro(m.mostrarDados());
             }
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
+    }
+
+    // Procedimento para cadastrar uma nova movimentação:
+    public static void cadastrar(){
+        Main.clear();
+        try{
+            sty.titulo("Cadastrar Movimentação");
+            // Definindo dados:
+            System.out.println("Tipo de movimentação: \n"
+                            + "1- Entrada \n"
+                            + "2- Saída"
+            );
+            int tipo = sc.nextInt();
+            System.out.println(); // Espaçamento
+            System.out.print("ID do produto: ");
+            int idProduto = sc.nextInt();
+            System.out.print("Quantidade do produto: ");
+            int quantidade = sc.nextInt();
+            System.out.print("ID do Funcionário: ");
+            int idFuncionario = sc.nextInt();
+            System.out.println("Data da movimentação (DD/MM/AAAA, ou ENTER para data atual): ");
+            sc.nextLine();
+            String data = sc.nextLine().trim();
+
+            // Fazendo requisição:
+            service.salvar(new MovimentacaoModel(quantidade), data, idProduto, idFuncionario, tipo);
         } catch(Exception e){
             sty.quadro(e.getMessage());
         }
