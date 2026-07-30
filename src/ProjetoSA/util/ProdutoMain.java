@@ -146,4 +146,21 @@ public class ProdutoMain {
             sty.quadro("ERRO ao atualizar: " + e.getMessage());
         }
     }
+    //metodo para deletar os produtos
+    public static void deletar(){
+        try {
+            Main.clear();
+            sty.titulo("Deletar Produto");
+
+            System.out.print("Digite o ID do produto que deseja deletar (desativar): ");
+            int id = Integer.parseInt(sc.nextLine().trim());
+
+            // Chama a função de desativar (estado false) passando o ID
+            service.desativarOuAtivar(id, false); 
+            
+            sty.quadro("Produto deletado/desativado com sucesso!");
+        } catch (Exception e) {
+            sty.quadro("ERRO ao deletar: " + e.getMessage());
+        }
+    }
 }
