@@ -28,7 +28,7 @@ public class Main {
                             + "2- Produtos \n"
                             + (usuarioAtual.isAdmin() ? "3- Funcionários \n" : "")
                             + "0- Sair");
-            option = sc.nextInt();
+            option = Integer.parseInt(sc.nextLine().trim());
             try{
                 switch (option) {
                     case 1:
