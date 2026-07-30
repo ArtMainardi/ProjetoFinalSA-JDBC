@@ -83,4 +83,16 @@ public class MovimentacaoModel {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+
+    // Métodos:
+    public String mostrarDados(){
+        // Cotrola formatação da tabela:
+        String extra = "";
+        for(int cont = produto.getNome_produto().length(); cont < 20; cont++){
+            extra += " ";
+        }
+        // Retorna os dados formatados:
+        return id_movimentacao + "  |  " + (produto.getNome_produto() + extra) + "  |  " + qtd_movimentacao
+            + "  |  " + funcionario.getNome_funcionario() + " - ID " + funcionario.getId_funcionario();
+    }
 }

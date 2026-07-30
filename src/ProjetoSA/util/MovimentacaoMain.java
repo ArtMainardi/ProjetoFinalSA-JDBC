@@ -40,24 +40,27 @@ public class MovimentacaoMain {
                         throw new Exception("ERRO: opção digitada inválida!");
                 }
             } catch(Exception e){
-                System.out.println(e.getMessage() + "\n");
+                sty.quadro(e.getMessage());
             }
+            Main.continuar();
+            Main.clear();
         } while(option != 0);
     }
 
     // Procedimento para printar todo o histórico de movimentações:
     public static void mostrarHistorico(){
         try{
+            Main.clear();
+            sty.titulo("Histórico de Movimentações");
+        sty.quadro("ID   |     Produto     |   Quantidade   |   Funcionário");
             // Faz a requisição:
             List<MovimentacaoModel> movimentacoes = service.listar();
             // Lista as movimentações na tela:
             for(MovimentacaoModel m : movimentacoes){
-                sty.quadro("ID: " + m.getId_movimentacao() + "  |  Produto: " + m.getProduto().getNome_produto() + "  |  Quantidade: " + m.getQtd_movimentacao());
+                sty.quadro(m.mostrarDados());
             }
         } catch(Exception e){
             sty.quadro(e.getMessage());
         }
-        Main.continuar();
-        Main.clear();
     }
 }
