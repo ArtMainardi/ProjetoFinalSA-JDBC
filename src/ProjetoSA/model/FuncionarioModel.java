@@ -1,22 +1,24 @@
-package model;
+package ProjetoSA.model;
 
 public class FuncionarioModel {
     private int id_funcionario;
     private String nome_funcionario;
     private String email_funcionario;
     private String senha_funcionario;
-    private boolean is_admin;
+    private boolean admin;
     private boolean ativo;
 
 
     // construtores
+    // vazio
+    public FuncionarioModel() {};
     // com id
     public FuncionarioModel(int id_funcionario, String nome_funcionario, String email_funcionario, String senha_funcionario,  boolean is_admin, boolean ativo) {
         this.id_funcionario = id_funcionario;
         this.nome_funcionario = nome_funcionario;
         this.email_funcionario = email_funcionario;
         this.senha_funcionario = senha_funcionario;
-        this.is_admin = is_admin;
+        this.admin = is_admin;
         this.ativo = ativo;
     }
 
@@ -25,7 +27,7 @@ public class FuncionarioModel {
         this.nome_funcionario = nome_funcionario;
         this.email_funcionario = email_funcionario;
         this.senha_funcionario = senha_funcionario;
-        this.is_admin = is_admin;
+        this.admin = is_admin;
         this.ativo = ativo;
     }
     
@@ -62,12 +64,12 @@ public class FuncionarioModel {
         this.senha_funcionario = senha_funcionario;
     }
 
-    public boolean isIs_admin() {
-        return is_admin;
+    public boolean isAdmin() {
+        return admin;
     }
 
-    public void setIs_admin(boolean is_admin) {
-        this.is_admin = is_admin;
+    public void setAdmin(boolean is_admin) {
+        this.admin = is_admin;
     }
 
     public boolean isAtivo() {
