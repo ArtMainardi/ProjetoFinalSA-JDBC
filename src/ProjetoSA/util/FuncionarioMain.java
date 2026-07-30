@@ -3,6 +3,7 @@ package ProjetoSA.util;
 import ProjetoSA.Main;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.service.FuncionarioService;
+import java.util.List;
 import java.util.Scanner;
 
 public class FuncionarioMain {
@@ -73,6 +74,29 @@ public class FuncionarioMain {
             sty.quadro("Funcionário cadastrado com sucesso!");
         } catch (Exception e) {
             sty.quadro("Erro ao cadastrar: " + e.getMessage());
+        }
+    }
+    //método que lista os funcionarios
+    public static void listarFuncionarios(){
+        try {
+            Main.clear();
+            sty.titulo("Lista de Funcionários");
+
+            List<FuncionarioModel> funcionarios = service.listar();
+
+            for(FuncionarioModel f : funcionarios){
+                // Operador ternário para facilitar a leitura no terminal
+                String admin = f.isAdmin() ? "Sim" : "Não";
+                String status = f.isAtivo() ? "Ativo" : "Desativado";
+                
+                sty.quadro("ID: " + f.getId_funcionario() + 
+                           " | Nome: " + f.getNome_funcionario() + 
+                           " | Email: " + f.getEmail_funcionario() + 
+                           " | Admin: " + admin +
+                           " | Status: " + status);
+            }
+        } catch (Exception e) {
+            sty.quadro("ERRO ao listar: " + e.getMessage());
         }
     }
 }
