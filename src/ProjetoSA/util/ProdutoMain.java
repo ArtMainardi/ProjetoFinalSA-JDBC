@@ -117,5 +117,33 @@ public class ProdutoMain {
             sty.quadro("ERRO ao listar: " + e.getMessage());
         }
     }
-    
+    //metodo para atualizar produtos
+    public static void atualizar(){
+        try {
+            Main.clear();
+            sty.titulo("Atualizar Produto");
+
+            System.out.println("Digite o ID do produto que deseja atualizar: ");
+            int id = Integer.parseInt(sc.nextLine().trim());
+            System.out.println("Digite o nomo nome do produto");
+            String nome = sc.nextLine().trim();
+            System.out.println("Digite a nova descrição: ");
+            String descricao = sc.nextLine().trim();
+            System.out.println("Digite a nova quantidade do produto: ");
+            int qtd = Integer.parseInt(sc.nextLine().trim());
+            System.out.println("Digite a nova quantidade mínima: ");
+            int qtdMinima = Integer.parseInt(sc.nextLine().trim());
+            System.out.print("O produto está ativo? (1 - Sim / 2 - Não): ");
+            int opcaoAtivo = Integer.parseInt(sc.nextLine().trim());
+            boolean ativo = (opcaoAtivo == 1);
+
+            ProdutoModel produtoModificado = new ProdutoModel(id, nome, descricao, qtd, qtdMinima, ativo);
+
+            service.atualizar(produtoModificado);
+
+            sty.quadro("Produto atualizado com sucesso");
+        } catch (Exception e) {
+            sty.quadro("ERRO ao atualizar: " + e.getMessage());
+        }
+    }
 }
