@@ -1,10 +1,14 @@
 package ProjetoSA.util;
 
 import ProjetoSA.Main;
+import ProjetoSA.model.MovimentacaoModel;
 import ProjetoSA.service.ProdutoService;
+
+import java.util.List;
 import java.util.Scanner;
 
 import ProjetoSA.Main;
+import ProjetoSA.model.ProdutoModel;
 
 public class ProdutoMain {
     static Style sty;
@@ -45,5 +49,19 @@ public class ProdutoMain {
         } while (opcao != 6);
     }
     //método para printar o histórico de produtos:
-    
+    public static void mostrarHistorico(){
+        try{
+            Main.clear();
+            sty.titulo("Histórico de Produtos");
+        sty.quadro("Nome_Produto   |     Descrição_Produto     |   Quantidade   |   Quantidade Mínima");
+            // Faz a requisição:
+            List<ProdutoModel> produtos = service.listar();
+            // Lista as movimentações na tela:
+            for(ProdutoModel p : produtos){
+                sty.quadro(p.mostrarDados());
+            }
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
+    }
 }
