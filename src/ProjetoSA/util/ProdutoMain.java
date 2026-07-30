@@ -99,4 +99,23 @@ public class ProdutoMain {
             sty.quadro("Erro ao cadastrar: " + e.getMessage());
         }
     }
+    //metodo para listar produtos
+    public static void listarProdutos(){
+        try {
+            Main.clear();
+            sty.titulo("Lista de Produtos");
+
+            List<ProdutoModel> produtos = service.listar();
+
+            for(ProdutoModel p : produtos){
+                //condicional pra listar somente os ativos:
+                if(p.isAtivo()){
+                    sty.quadro("ID: " + p.getId_produto() + " | Nome: " + p.getNome_produto() + " | Qtd: " + p.getQtd_produto());
+                }
+            }
+        } catch (Exception e) {
+            sty.quadro("ERRO ao listar: " + e.getMessage());
+        }
+    }
+    
 }
