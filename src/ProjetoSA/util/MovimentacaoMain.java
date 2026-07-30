@@ -19,15 +19,15 @@ public class MovimentacaoMain {
 
         Main.clear();
         // Menu de opções:
-        int option;
+        int option = 1;
         do{
-            sty.titulo("Movimentações");
-            System.out.println("Digite uma opção: \n"
-                            + "1- Visualizar Histórico Geral \n"
-                            + "2- Registrar Movimentação \n"
-                            + "0- Voltar");
-            option = Integer.parseInt(sc.nextLine().trim());
             try{
+                sty.titulo("Movimentações");
+                System.out.println("Digite uma opção: \n"
+                                + "1- Visualizar Histórico Geral \n"
+                                + "2- Registrar Movimentação \n"
+                                + "0- Voltar");
+                option = Integer.parseInt(sc.nextLine().trim());
                 switch (option) {
                     case 1:
                         mostrarHistorico();
