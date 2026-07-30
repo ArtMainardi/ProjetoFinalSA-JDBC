@@ -1,14 +1,10 @@
 package ProjetoSA.util;
 
 import ProjetoSA.Main;
-import ProjetoSA.model.MovimentacaoModel;
+import ProjetoSA.model.ProdutoModel;
 import ProjetoSA.service.ProdutoService;
-
 import java.util.List;
 import java.util.Scanner;
-
-import ProjetoSA.Main;
-import ProjetoSA.model.ProdutoModel;
 
 public class ProdutoMain {
     static Style sty;
@@ -38,6 +34,21 @@ public class ProdutoMain {
                     case 1:
                         mostrarHistorico();
                         break;
+                    case 2:
+                        salvar();
+                        break;
+                    case 3:
+                        listarProdutos();
+                        break;
+                    case 4:
+                        atualizar();
+                        break;
+                    case 5:
+                        deletar();
+                        break;
+                    case 6:
+                        System.out.println("Saindo...");
+                        break;
                     default:
                         throw new Exception("ERRO: opção digitada inválida!");
                 }
@@ -62,6 +73,30 @@ public class ProdutoMain {
             }
         } catch(Exception e){
             sty.quadro(e.getMessage());
+        }
+    }
+    //método que vai cadastrar os produtos
+    public static void salvar(){
+        try {
+            Main.clear();
+            sty.titulo("Cadastrar Produto");
+            
+            System.out.println("Nome do produto: ");
+            String nome = sc.nextLine().trim();
+            System.out.println("Descrição do produto: ");
+            String descricao = sc.nextLine().trim();
+            System.out.println("Quantidade Atual: ");
+            int qtdAtual = Integer.parseInt(sc.nextLine().trim());
+            System.out.println("Quantidade Mínima: ");
+            int qtdMinima = Integer.parseInt(sc.nextLine().trim());
+            //o id será passado como 0, pois o banco vai gerar automaticamente.
+            
+            ProdutoModel novoProduto = new ProdutoModel(nome, descricao, qtdAtual, qtdMinima, true);
+            service.salvar(novoProduto);
+            
+            sty.quadro("Produto Cadastrado com Sucesso!");
+        } catch (Exception e) {
+            sty.quadro("Erro ao cadastrar: " + e.getMessage());
         }
     }
 }
