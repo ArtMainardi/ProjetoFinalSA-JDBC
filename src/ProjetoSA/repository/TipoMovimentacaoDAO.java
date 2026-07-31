@@ -1,12 +1,13 @@
 package ProjetoSA.repository;
 import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.TipoMovimentacaoModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import ProjetoSA.model.TipoMovimentacaoModel;
 
 public class TipoMovimentacaoDAO {
     Conexao conexao = new Conexao();
@@ -16,7 +17,7 @@ public class TipoMovimentacaoDAO {
         String sql = "INSERT INTO tipo_movimentacao(tipo) VALUES (?)";
 
         // Faz a conexão e prepara a query:
-        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             // Definne os dados da query:
             stmt.setString(1, t.getTipo());
             stmt.executeUpdate();

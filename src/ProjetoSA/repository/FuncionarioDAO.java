@@ -1,11 +1,12 @@
 package ProjetoSA.repository;
 import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.FuncionarioModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import ProjetoSA.model.FuncionarioModel;
 
 public class FuncionarioDAO {
     Conexao conexao = new Conexao();
@@ -15,7 +16,7 @@ public class FuncionarioDAO {
         String sql = "INSERT INTO Funcionario(nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo) VALUES (?,?,?,?,?)";
 
         // Faz a conexão e prepara a query:
-        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             // Define os dados da query:
             stmt.setString(1, f.getNome_funcionario());
             stmt.setString(2, f.getEmail_funcionario());
