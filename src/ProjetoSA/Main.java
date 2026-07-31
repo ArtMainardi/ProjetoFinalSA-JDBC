@@ -20,16 +20,17 @@ public class Main {
         login();
 
         // Menu de opções:
-        int option;
+        int option = 1;
         do{
-            sty.titulo("Gerenciador de Movimentação de Almoxarifado");
-            System.out.println("Digite uma opção: \n"
-                            + "1- Movimentações \n"
-                            + "2- Produtos \n"
-                            + (usuarioAtual.isAdmin() ? "3- Funcionários \n" : "")
-                            + "0- Sair");
-            option = Integer.parseInt(sc.nextLine().trim());
             try{
+                sty.titulo("Gerenciador de Movimentação de Almoxarifado");
+                System.out.println("Digite uma opção: \n"
+                                + "1- Movimentações \n"
+                                + "2- Produtos \n"
+                                + (usuarioAtual.isAdmin() ? "3- Funcionários \n" : "")
+                                + "0- Sair");
+                option = sc.nextInt();
+                
                 switch (option) {
                     case 1:
                         MovimentacaoMain.main(sty, sc);

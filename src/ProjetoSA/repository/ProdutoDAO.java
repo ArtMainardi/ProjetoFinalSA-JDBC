@@ -17,7 +17,7 @@ public class ProdutoDAO {
         String sql = "INSERT INTO Produto(nome_produto, descricao_produto, qtd_produto, qtd_minima, ativo) VALUES (?,?,?,?,?)";
 
         // Faz a conexão e prepara a query:
-        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             // Define os dados da query:
             stmt.setString(1, p.getNome_produto());
             stmt.setString(2, p.getDescricao_produto());
