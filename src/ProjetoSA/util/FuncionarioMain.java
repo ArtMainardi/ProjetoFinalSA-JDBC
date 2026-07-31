@@ -23,10 +23,10 @@ public class FuncionarioMain {
             try {
                 sty.titulo("Produtos");
                 System.out.println("Digite uma opção: \n"
-                                + "1 - Cadastrar Cliente \n"
-                                + "2 - Listar Clientes \n"
-                                + "3 - Atualizar Cliente \n"
-                                + "4 - Deletar Cliente \n"
+                                + "1 - Cadastrar Funcionario \n"
+                                + "2 - Listar Funcionarios \n"
+                                + "3 - Atualizar Funcionario \n"
+                                + "4 - Deletar Funcionario \n"
                                 + "5 - Sair");
                 opcao = Integer.parseInt(sc.nextLine().trim());
                 switch (opcao) {
