@@ -31,12 +31,16 @@ public class FuncionarioMain {
                 opcao = Integer.parseInt(sc.nextLine().trim());
                 switch (opcao) {
                     case 1:
+                        salvar();
                         break;
                     case 2:
+                        listarFuncionarios();
                         break;
                     case 3:
+                        atualizar();
                         break;
                     case 4:
+                        deletar();
                         break;
                     case 5:
                         System.out.println("Saindo...");
@@ -99,6 +103,7 @@ public class FuncionarioMain {
             sty.quadro("ERRO ao listar: " + e.getMessage());
         }
     }
+    //metodo que vai atualizar os funcionarios
     public static void atualizar(){
         try {
             Main.clear();
@@ -132,6 +137,27 @@ public class FuncionarioMain {
             sty.quadro("Funcionário atualizado com sucesso!");
         } catch (Exception e) {
             sty.quadro("ERRO ao atualizar: " + e.getMessage());
+        }
+    }
+    // método para ativar ou desativar os funcionários (soft delete)
+    public static void deletar(){
+        try {
+            Main.clear();
+            sty.titulo("Ativar / Desativar Funcionário");
+
+            System.out.print("Digite o ID do funcionário: ");
+            int id = Integer.parseInt(sc.nextLine().trim());
+
+            System.out.print("Deseja ATIVAR ou DESATIVAR esse funcionário? (1 - Ativar / 2 - Desativar): ");
+            int opcao = Integer.parseInt(sc.nextLine().trim());
+            boolean estado = (opcao == 1);
+
+            // Chama a função de desativar/ativar no service
+            service.desativarOuAtivar(id, estado); 
+            
+            sty.quadro("Status do funcionário alterado com sucesso!");
+        } catch (Exception e) {
+            sty.quadro("ERRO ao alterar status: " + e.getMessage());
         }
     }
 }
