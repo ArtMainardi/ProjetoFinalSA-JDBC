@@ -99,4 +99,39 @@ public class FuncionarioMain {
             sty.quadro("ERRO ao listar: " + e.getMessage());
         }
     }
+    public static void atualizar(){
+        try {
+            Main.clear();
+            sty.titulo("Atualizar Funcionário");
+
+            System.out.print("Digite o ID do funcionário que deseja atualizar: ");
+            int id = Integer.parseInt(sc.nextLine().trim());
+            
+            // Busca o funcionário para confirmar que ele existe (o service vai dar throw se não achar)
+            FuncionarioModel funcAtual = service.buscarID(id);
+            System.out.println("Editando o funcionário: " + funcAtual.getNome_funcionario());
+            
+            System.out.print("Digite o novo nome: ");
+            String nome = sc.nextLine().trim();
+            System.out.print("Digite o novo email: ");
+            String email = sc.nextLine().trim();
+            System.out.print("Digite a nova senha: ");
+            String senha = sc.nextLine().trim();
+            
+            System.out.print("É administrador? (1 - Sim / 2 - Não): ");
+            int opcaoAdmin = Integer.parseInt(sc.nextLine().trim());
+            boolean isAdmin = (opcaoAdmin == 1);
+            
+            System.out.print("O funcionário está ativo? (1 - Sim / 2 - Não): ");
+            int opcaoAtivo = Integer.parseInt(sc.nextLine().trim());
+            boolean isAtivo = (opcaoAtivo == 1);
+
+            FuncionarioModel funcionarioModificado = new FuncionarioModel(id, nome, email, senha, isAdmin, isAtivo);
+            service.atualizar(funcionarioModificado);
+
+            sty.quadro("Funcionário atualizado com sucesso!");
+        } catch (Exception e) {
+            sty.quadro("ERRO ao atualizar: " + e.getMessage());
+        }
+    }
 }
