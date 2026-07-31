@@ -92,7 +92,7 @@ public class TipoMovimentacaoDAO {
     }
 
     // DELETE:
-    public boolean excluir(int id) throws SQLException {
+    public boolean delete(int id) throws SQLException {
         String sql = "DELETE FROM tipo_movimentacao WHERE id = ?";
 
         // Faz a conexão e prepara a query:
