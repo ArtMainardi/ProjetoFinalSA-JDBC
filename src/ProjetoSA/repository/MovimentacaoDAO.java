@@ -30,7 +30,7 @@ public class MovimentacaoDAO {
             stmt.setInt(4, m.getProduto().getId_produto());
             stmt.setInt(5, m.getTipo().getId_tipo());
             // Executa a query:
-            stmt.executeQuery();
+            stmt.executeUpdate();
             
             // Verifica o ID gerado:
             try (ResultSet rs = stmt.getGeneratedKeys()){

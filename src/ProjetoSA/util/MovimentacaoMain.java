@@ -91,6 +91,7 @@ public class MovimentacaoMain {
 
             // Fazendo requisição:
             service.salvar(new MovimentacaoModel(quantidade), data, idProduto, idFuncionario, tipo);
+            sty.quadro("Movimentação registrada com sucesso!!");
         } catch(Exception e){
             sty.quadro(e.getMessage());
         }
