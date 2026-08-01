@@ -33,7 +33,7 @@ public class Main {
                 
                 switch (option) {
                     case 1:
-                        MovimentacaoMain.main(sty, sc);
+                        MovimentacaoMain.main(sty, sc, usuarioAtual);
                         break;
                     case 2:
                         break;
@@ -111,7 +111,7 @@ public class Main {
         }
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        for(int cont = 0; cont < 2; cont++){
+        for(int cont = 0; cont < 5; cont++){
             System.out.println(" ");
         }
     }
