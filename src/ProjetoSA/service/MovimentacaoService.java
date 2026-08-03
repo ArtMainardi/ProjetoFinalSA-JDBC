@@ -3,33 +3,38 @@ package ProjetoSA.service;
 import ProjetoSA.model.MovimentacaoModel;
 import ProjetoSA.repository.MovimentacaoDAO;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class MovimentacaoService {
     private MovimentacaoDAO repository = new MovimentacaoDAO();
 
     // Salvar:
-    public MovimentacaoModel salvar(MovimentacaoModel m) throws SQLException{
+    public MovimentacaoModel salvar(MovimentacaoModel m, String data, int idProduto, int idFuncionario, int idTipo) throws SQLException{
         // Verifica a quantidade de movimentações:
         if(m.getQtd_movimentacao() <= 0){
             throw new RuntimeException("Erro: A quantidade de movimentações deve ser maior que 0");
         }
         // Verifica a data:
-        if(m.getData_movimentacao() == null){
-            throw new RuntimeException("Erro: A data de movimentação é obrigatória");
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        if(data.isEmpty()){
+            m.setData_movimentacao(LocalDate.now());
+        } else{
+            m.setData_movimentacao(LocalDate.parse(data, formato));
         }
         // Verifica o funcionário:
-        if(m.getFuncionario() == null || m.getFuncionario().getId_funcionario() <= 0){
-            throw new RuntimeException("Erro: Um funcionário válido deve ser associado a movimentação");
-        }
+        FuncionarioService fService = new FuncionarioService();
+        m.setFuncionario(fService.buscarID(idFuncionario));
+
         // Verifica o produto:
-        if(m.getProduto() == null || m.getProduto().getId_produto() <= 0){
-            throw new RuntimeException("Erro: Um produto válido deve ser associado a movimentação");
-        }
+        ProdutoService pService = new ProdutoService();
+        m.setProduto(pService.buscarID(idProduto));
+
         // Verifica o tipo de movimentação:
-        if(m.getTipo() == null || m.getTipo().getId_tipo() <= 0){
-            throw new RuntimeException("Erro: O tipo de movimentação deve ser informado");
-        }
+        TipoMovimentacaooService tService = new TipoMovimentacaooService();
+        m.setTipo(tService.buscar(idTipo));
+
         // Manda a requisição para o repository:
         return repository.create(m);
     }
@@ -64,16 +69,34 @@ public class MovimentacaoService {
     }
 
     // Atualizar:
-    public MovimentacaoModel atualizar(MovimentacaoModel m) throws SQLException{
+    public MovimentacaoModel atualizar(MovimentacaoModel m, String data, int idProduto, int idFuncionario, int idTipo) throws SQLException{
+        // Verifica se encontrou algum dado com esse ID:
+        buscarId(m.getId_movimentacao());
+
+        // Verifica a quantidade de movimentações:
         if(m.getQtd_movimentacao() <= 0){
-            throw new RuntimeException("Erro: A quantidade para atualização deve ser maior que zero");
+            throw new RuntimeException("Erro: A quantidade de movimentações deve ser maior que 0");
         }
-        if(m.getData_movimentacao() == null){
-            throw new RuntimeException("Erro: A data não pode ser nula");
+        // Verifica a data:
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        if(data.isEmpty()){
+            m.setData_movimentacao(LocalDate.now());
+        } else{
+            m.setData_movimentacao(LocalDate.parse(data, formato));
         }
-        if(repository.readId(m.getId_movimentacao())== null){
-            throw new RuntimeException("Erro: Não é possível atualizar uma movimentação inexistente");
-        }
+        // Verifica o funcionário:
+        FuncionarioService fService = new FuncionarioService();
+        m.setFuncionario(fService.buscarID(idFuncionario));
+
+        // Verifica o produto:
+        ProdutoService pService = new ProdutoService();
+        m.setProduto(pService.buscarID(idProduto));
+
+        // Verifica o tipo de movimentação:
+        TipoMovimentacaooService tService = new TipoMovimentacaooService();
+        m.setTipo(tService.buscar(idTipo));
+        
+        // Manda a requisição para o repository:
         return repository.update(m);
     }
 
