@@ -1,5 +1,10 @@
 package ProjetoSA.repository;
 
+import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.FuncionarioModel;
+import ProjetoSA.model.LogModel;
+import ProjetoSA.service.FuncionarioService;
+import ProjetoSA.util.Style;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,12 +13,6 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import ProjetoSA.connection.Conexao;
-import ProjetoSA.model.FuncionarioModel;
-import ProjetoSA.model.LogModel;
-import ProjetoSA.service.FuncionarioService;
-import ProjetoSA.util.Style;
 
 public class LogDAO{
     Conexao conexao = new Conexao();
@@ -71,7 +70,7 @@ public class LogDAO{
 
     public static void registrar(Integer idFuncionario, String acao, String detalhes) {
         Conexao c = new Conexao();
-        String sql = "INSERT INTO LogSistema (id_funcionario, acao, detalhes) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO LogSistem (id_funcionario, acao, detalhes) VALUES (?, ?, ?)";
 
         // Faz conexão e prepara a query:
         try(Connection conn = c.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
