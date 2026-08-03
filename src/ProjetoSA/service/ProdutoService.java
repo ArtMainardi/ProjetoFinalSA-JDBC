@@ -38,7 +38,7 @@ public class ProdutoService {
     }
 
     // Buscar id
-    public ProdutoModel buscarID(int id_produto) throws SQLException{
+    public ProdutoModel buscarId(int id_produto) throws SQLException{
         // Verifica integridade do ID:
         if(id_produto < 0){
             throw new RuntimeException("ERRO: ID informado inválido!");

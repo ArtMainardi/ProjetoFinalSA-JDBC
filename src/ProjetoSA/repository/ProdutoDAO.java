@@ -43,7 +43,7 @@ public class ProdutoDAO {
     // READ:
     public ArrayList<ProdutoModel> read() throws SQLException{
         ArrayList<ProdutoModel> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Produto";
+        String sql = "SELECT * FROM Produto WHERE ativo = true";
 
         // Faz a conexão e executa a query:
         try(Connection conn = conexao.conectar(); Statement stmt = conn.createStatement(); ResultSet resultado = stmt.executeQuery(sql);){
@@ -104,6 +104,7 @@ public class ProdutoDAO {
             stmt.setInt(3, produtoModificado.getQtd_produto());
             stmt.setInt(4, produtoModificado.getQtd_minima());
             stmt.setBoolean(5, produtoModificado.isAtivo());
+            stmt.setInt(6, produtoModificado.getId_produto());
             int linhasAfetadas = stmt.executeUpdate();
 
             // Verifica se atualizou:
@@ -116,7 +117,7 @@ public class ProdutoDAO {
 
     // ATIVAR/DESATIVAR (SOFT DELETE):
     public boolean desativarOuAtivar(int id, boolean estado) throws SQLException {
-        String sql = "UPDATE FROM Produto SET ativo = ? WHERE id_produto = ?";
+        String sql = "UPDATE Produto SET ativo = ? WHERE id_produto = ?";
         
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {
