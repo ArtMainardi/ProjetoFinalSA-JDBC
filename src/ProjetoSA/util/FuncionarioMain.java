@@ -176,26 +176,42 @@ public class FuncionarioMain {
         try{
             Main.clear();
             sty.titulo("Modificar Funcionário");
+            System.out.println("Observação: pressione ENTER nos dados em que você não deseja modificar: ");
             System.out.print("Nome do funcionário: " + alvo.getNome_funcionario() + " -> ");
             String nome = sc.nextLine().trim();
+            if(nome.isEmpty()){
+                nome = alvo.getNome_funcionario();
+            }
+
             System.out.print("Email do funcionário: " + alvo.getEmail_funcionario() + " -> ");
             String email = sc.nextLine().trim();
-            System.out.print("Senha do funcionário: ->");
+            if(email.isEmpty()){
+                email = alvo.getEmail_funcionario();
+            }
+
+            System.out.print("Senha do funcionário -> ");
             String senha = sc.nextLine().trim();
+            if(senha.isEmpty()){
+                senha = alvo.getSenha_funcionario();
+            }
 
             System.out.println("Tipo de usuário: \n"
                             + "1- Administrador \n"
-                            + "2- Funcionário"
-            );
+                            + "2- Funcionário");
             System.out.print((alvo.isAdmin() ? "Administrador" : "Funcionário") + " -> ");
-            int tipo = Integer.parseInt(sc.nextLine().trim());
+            String tipoTexto = sc.nextLine().trim();
             boolean admin;
-            if(tipo == 1){
-                admin = true;
-            } else if(tipo == 2){
-                admin = false;
+            if(tipoTexto.isEmpty()){
+                admin = alvo.isAdmin();
             } else{
-                throw new Exception("ERRO: opção digitada inválida!");
+                int tipo = Integer.parseInt(tipoTexto);
+                if(tipo == 1){
+                    admin = true;
+                } else if(tipo == 2){
+                    admin = false;
+                } else{
+                    throw new Exception("ERRO: opção digitada inválida!");
+                }
             }
 
             FuncionarioModel funcionario = new FuncionarioModel(alvo.getId_funcionario(), nome, email, senha, admin, alvo.isAtivo());
