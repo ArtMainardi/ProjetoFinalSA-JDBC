@@ -3,6 +3,7 @@ import ProjetoSA.connection.Conexao;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.repository.FuncionarioDAO;
 import ProjetoSA.util.MovimentacaoMain;
+import ProjetoSA.util.ProdutoMain;
 import ProjetoSA.util.Style;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -36,6 +37,7 @@ public class Main {
                         MovimentacaoMain.main(sty, sc, usuarioAtual);
                         break;
                     case 2:
+                        ProdutoMain.main(sty, sc);
                         break;
                     case 3:
                         if(!usuarioAtual.isAdmin()){

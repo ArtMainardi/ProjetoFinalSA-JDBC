@@ -74,4 +74,15 @@ public class ProdutoModel {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+    // Métodos:
+    public String mostrarDados(){
+        // Cotrola formatação da tabela:
+        String extra = "";
+        for(int cont = nome_produto.length(); cont < 20; cont++){
+            extra += " ";
+        }
+        // Retorna os dados formatados:
+        return id_produto + "  |  " + (nome_produto + extra) + "  |  " + qtd_produto
+            + "  |  " + qtd_minima ;
+    }
 }

@@ -29,7 +29,7 @@ public class MovimentacaoService {
 
         // Verifica o produto:
         ProdutoService pService = new ProdutoService();
-        m.setProduto(pService.buscarID(idProduto));
+        m.setProduto(pService.buscarId(idProduto));
 
         // Verifica o tipo de movimentação:
         TipoMovimentacaooService tService = new TipoMovimentacaooService();
@@ -90,7 +90,7 @@ public class MovimentacaoService {
 
         // Verifica o produto:
         ProdutoService pService = new ProdutoService();
-        m.setProduto(pService.buscarID(idProduto));
+        m.setProduto(pService.buscarId(idProduto));
 
         // Verifica o tipo de movimentação:
         TipoMovimentacaooService tService = new TipoMovimentacaooService();
