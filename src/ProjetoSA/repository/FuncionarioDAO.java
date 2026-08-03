@@ -33,7 +33,7 @@ public class FuncionarioDAO {
                     f.setId_funcionario(rs.getInt(1));
 
                     // Log:
-                    LogDAO.registrar(Main.getUsuarioAtual().getId_funcionario(), "CADASTROU_FUNCIONARIO", 
+                    LogDAO.registrar(Main.getIdUsuarioAtual(), "CADASTROU_FUNCIONARIO", 
                         "Cadastrou o funcionário: " + f.getNome_funcionario() + " (ID: " + f.getId_funcionario() + ").");
                     return f;
                 } else{
@@ -169,7 +169,7 @@ public class FuncionarioDAO {
             if(anterior.isAtivo() != f.isAtivo()){
                 log += "Status: " + (!anterior.isAtivo() ? "DESATIVO -> ATIVO" : "ATIVO -> DESATIVO") + "   |  ";
             }
-            LogDAO.registrar(Main.getUsuarioAtual().getId_funcionario(), "ATUALIZOU_FUNCIONARIO", 
+            LogDAO.registrar(Main.getIdUsuarioAtual(), "ATUALIZOU_FUNCIONARIO", 
                 "Atualizou o funcionário: " + f.getNome_funcionario() + " (ID: " + f.getId_funcionario() + "). Mudanças feitas: " + (log.trim().isEmpty() ? "nenhuma" : log));
             
             return f;
@@ -190,7 +190,7 @@ public class FuncionarioDAO {
             int linhasAfetadas = stmt.executeUpdate(); // Pega a quantidade de linhas afetadas pela query
             if(linhasAfetadas > 0){
                 // Log:
-                LogDAO.registrar(Main.getUsuarioAtual().getId_funcionario(), ((estado ? "ATIVOU" : "DESATIVOU") + "_FUNCIONARIO"), 
+                LogDAO.registrar(Main.getIdUsuarioAtual(), ((estado ? "ATIVOU" : "DESATIVOU") + "_FUNCIONARIO"), 
                     (estado ? "Ativou" : "Desativou") + " o funcionário com ID: " + id + ".");
                 return true;
             }
@@ -232,12 +232,12 @@ public class FuncionarioDAO {
                 // Verifica se a senha do BD é a mesma que a digitada pelo usuário:
                 if(senhaBanco.equals(senha)){
                     // Log:
-                    LogDAO.registrar(resultado.getInt("id_funcionario"), "REALIZOU_LOGIN", 
+                    LogDAO.registrar(Main.getIdUsuarioAtual(), "REALIZOU_LOGIN", 
                         "Usuário " + resultado.getString("nome_funcionario") + " (ID: " + resultado.getInt("id_funcionario") + ") realizou login.");
                     return true;
                 } else{
                     // Log:
-                    LogDAO.registrar(null, "FALHA_LOGIN", 
+                    LogDAO.registrar(Main.getIdUsuarioAtual(), "FALHA_LOGIN", 
                         "Alguém falhou ao tentar fazer login no usuário: " + 
                         resultado.getString("nome_funcionario") + " (ID: " + resultado.getInt("id_funcionario") + ").");
                     return false;

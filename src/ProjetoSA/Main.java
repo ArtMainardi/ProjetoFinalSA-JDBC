@@ -127,7 +127,7 @@ public class Main {
         sc.nextLine();
     }
 
-    public static FuncionarioModel getUsuarioAtual(){
-        return usuarioAtual;
+    public static Integer getIdUsuarioAtual(){
+        return usuarioAtual.getId_funcionario();
     }
 }
