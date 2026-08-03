@@ -80,4 +80,26 @@ public class FuncionarioModel {
         this.ativo = ativo;
     }
 
+    // Métodos:
+    public String mostrarDados(){
+    // Controla formatação da tabela:
+    String extra = "";
+    for(int cont = nome_funcionario.length(); cont < 20; cont++){
+        extra += " ";
+    }
+
+    // Define tipo do funcionário:
+    String tipo;
+    if(admin){
+        tipo = "Administrador";
+    } else{
+        tipo = "Funcionário";
+    }
+
+    // Retorna os dados formatados:
+    return id_funcionario + "  |  "
+        + (nome_funcionario + extra) + "  |  "
+        + email_funcionario + "  |  "
+        + tipo;
+}
 }

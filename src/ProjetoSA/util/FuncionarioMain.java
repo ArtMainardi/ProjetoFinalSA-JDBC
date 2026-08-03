@@ -1,10 +1,11 @@
 package ProjetoSA.util;
 
+import java.util.List;
+import java.util.Scanner;
+
 import ProjetoSA.Main;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.service.FuncionarioService;
-import java.util.List;
-import java.util.Scanner;
 
 public class FuncionarioMain {
     static Style sty;
@@ -12,152 +13,236 @@ public class FuncionarioMain {
     static FuncionarioService service = new FuncionarioService();
 
     public static void main(Style style, Scanner scanner){
-        //definição de variáveis
+        // Definindo variáveis:
         sty = style;
         sc = scanner;
 
         Main.clear();
-        //menu de opções
-        int opcao = 0;
-        do { 
-            try {
-                sty.titulo("Produtos");
+        // Menu de opções:
+        int option = 1;
+        do{
+            try{
+                sty.titulo("Funcionários");
                 System.out.println("Digite uma opção: \n"
-                                + "1 - Cadastrar Funcionario \n"
-                                + "2 - Listar Funcionarios \n"
-                                + "3 - Atualizar Funcionario \n"
-                                + "4 - Deletar Funcionario \n"
-                                + "5 - Sair");
-                opcao = Integer.parseInt(sc.nextLine().trim());
-                switch (opcao) {
+                                + "1- Listar todos os Funcionários \n"
+                                + "2- Cadastrar Funcionário \n"
+                                + "3- Detalhes de um Funcionário \n"
+                                + "0- Voltar");
+                option = Integer.parseInt(sc.nextLine().trim());
+
+                switch (option) {
                     case 1:
-                        salvar();
+                        mostrarHistorico();
+                        Main.continuar();
                         break;
                     case 2:
-                        listarFuncionarios();
+                        cadastrar();
+                        Main.continuar();
                         break;
                     case 3:
-                        atualizar();
+                        detalhesFuncionario();
                         break;
-                    case 4:
-                        deletar();
-                        break;
-                    case 5:
-                        System.out.println("Saindo...");
+                    case 0:
                         break;
                     default:
                         throw new Exception("ERRO: opção digitada inválida!");
                 }
-            } catch (Exception e) {
+            } catch(Exception e){
                 sty.quadro(e.getMessage());
+                Main.continuar();
             }
-            Main.continuar();
             Main.clear();
-        } while (opcao != 5);
+        } while(option != 0);
     }
-    //metodo que vai cadastrar funcionarios
-    public static void salvar(){
-        try {
-            Main.clear();
-            sty.titulo("Cadastrar Funcionario");
 
-            System.out.print("Nome: ");
-            String nome = sc.nextLine().trim();
-            System.out.print("Email: ");
-            String email = sc.nextLine().trim();
-            System.out.print("Senha: ");
-            String senha = sc.nextLine().trim();
-            System.out.print("É administrador? (1 - Sim / 2 - Não): ");
-            int opcaoAdmin = Integer.parseInt(sc.nextLine().trim());
-            boolean isAdmin = (opcaoAdmin == 1);
-            
-            // O funcionário já começa ativo (true).
-            FuncionarioModel novoFuncionario = new FuncionarioModel(nome, email, senha, isAdmin, true);
-            service.salvar(novoFuncionario);
-            
-            sty.quadro("Funcionário cadastrado com sucesso!");
-        } catch (Exception e) {
-            sty.quadro("Erro ao cadastrar: " + e.getMessage());
-        }
-    }
-    //método que lista os funcionarios
-    public static void listarFuncionarios(){
-        try {
+    // Procedimento para printar todos os funcionários:
+    public static void mostrarHistorico(){
+        try{
             Main.clear();
-            sty.titulo("Lista de Funcionários");
+            sty.titulo("Histórico de Funcionários");
+            sty.quadro("ID   |     Nome     |     Email     |   Tipo");
 
+            // Faz a requisição:
             List<FuncionarioModel> funcionarios = service.listar();
 
+            // Lista os funcionários na tela:
             for(FuncionarioModel f : funcionarios){
-                // Operador ternário para facilitar a leitura no terminal
-                String admin = f.isAdmin() ? "Sim" : "Não";
-                String status = f.isAtivo() ? "Ativo" : "Desativado";
-                
-                sty.quadro("ID: " + f.getId_funcionario() + 
-                           " | Nome: " + f.getNome_funcionario() + 
-                           " | Email: " + f.getEmail_funcionario() + 
-                           " | Admin: " + admin +
-                           " | Status: " + status);
+                sty.quadro(f.mostrarDados());
             }
-        } catch (Exception e) {
-            sty.quadro("ERRO ao listar: " + e.getMessage());
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
         }
     }
-    //metodo que vai atualizar os funcionarios
-    public static void atualizar(){
-        try {
-            Main.clear();
-            sty.titulo("Atualizar Funcionário");
 
-            System.out.print("Digite o ID do funcionário que deseja atualizar: ");
-            int id = Integer.parseInt(sc.nextLine().trim());
-            
-            // Busca o funcionário para confirmar que ele existe (o service vai dar throw se não achar)
-            FuncionarioModel funcAtual = service.buscarID(id);
-            System.out.println("Editando o funcionário: " + funcAtual.getNome_funcionario());
-            
-            System.out.print("Digite o novo nome: ");
+    // Procedimento para cadastrar um novo funcionário:
+    public static void cadastrar(){
+        Main.clear();
+
+        try{
+            sty.titulo("Cadastrar Funcionário");
+            System.out.print("Nome do funcionário: ");
             String nome = sc.nextLine().trim();
-            System.out.print("Digite o novo email: ");
+            System.out.print("Email do funcionário: ");
             String email = sc.nextLine().trim();
-            System.out.print("Digite a nova senha: ");
+            System.out.print("Senha do funcionário: ");
             String senha = sc.nextLine().trim();
-            
-            System.out.print("É administrador? (1 - Sim / 2 - Não): ");
-            int opcaoAdmin = Integer.parseInt(sc.nextLine().trim());
-            boolean isAdmin = (opcaoAdmin == 1);
-            
-            System.out.print("O funcionário está ativo? (1 - Sim / 2 - Não): ");
-            int opcaoAtivo = Integer.parseInt(sc.nextLine().trim());
-            boolean isAtivo = (opcaoAtivo == 1);
 
-            FuncionarioModel funcionarioModificado = new FuncionarioModel(id, nome, email, senha, isAdmin, isAtivo);
-            service.atualizar(funcionarioModificado);
+            System.out.println("Tipo de usuário: \n"
+                            + "1- Administrador \n"
+                            + "2- Funcionário"
+            );
+            int tipo = Integer.parseInt(sc.nextLine().trim());
+            boolean admin;
+            if(tipo == 1){
+                admin = true;
+            } else if(tipo == 2){
+                admin = false;
+            } else{
+                throw new Exception("ERRO: opção digitada inválida!");
+            }
 
-            sty.quadro("Funcionário atualizado com sucesso!");
-        } catch (Exception e) {
-            sty.quadro("ERRO ao atualizar: " + e.getMessage());
+            FuncionarioModel funcionario = new FuncionarioModel(nome, email, senha, admin, true);
+
+            // Fazendo requisição:
+            service.salvar(funcionario);
+            sty.quadro("Funcionário cadastrado com sucesso!");
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
         }
     }
-    // método para ativar ou desativar os funcionários (soft delete)
-    public static void deletar(){
-        try {
-            Main.clear();
-            sty.titulo("Ativar / Desativar Funcionário");
 
-            System.out.print("Digite o ID do funcionário: ");
-            int id = Integer.parseInt(sc.nextLine().trim());
+    // Procedimento para buscar um funcionário:
+    public static void detalhesFuncionario(){
+        try{
+            // Chama método auxiliar para buscar o funcionário:
+            FuncionarioModel alvo = buscarFuncionario();
 
-            System.out.print("Deseja ATIVAR ou DESATIVAR esse funcionário? (1 - Ativar / 2 - Desativar): ");
-            int opcao = Integer.parseInt(sc.nextLine().trim());
-            boolean estado = (opcao == 1);
+            int option = -1;
 
-            // Chama a função de desativar/ativar no service
-            service.desativarOuAtivar(id, estado); 
-            
-            sty.quadro("Status do funcionário alterado com sucesso!");
-        } catch (Exception e) {
-            sty.quadro("ERRO ao alterar status: " + e.getMessage());
+            do{
+                // Exibe detalhes do funcionário na tela:
+                Main.clear();
+                sty.titulo("Detalhes do Funcionário");
+
+                System.out.println("ID: " + alvo.getId_funcionario() + "\n\n"
+                                + "Nome: " + alvo.getNome_funcionario() + "\n"
+                                + "Email: " + alvo.getEmail_funcionario() + "\n"
+                                + "Administrador: " + (alvo.isAdmin() ? "SIM" : "NÃO") + "\n"
+                                + "Status: " + (alvo.isAtivo() ? "ATIVO" : "DESATIVO")
+                );
+
+                System.out.println("\n\nDigite uma opção: \n"
+                                + "1- Editar Funcionário \n"
+                                + "2- " + (alvo.isAtivo() ? "Desativar" : "Ativar") + " Funcionário \n"
+                                + "0- Voltar"
+                );
+
+                option = Integer.parseInt(sc.nextLine().trim());
+
+                switch (option) {
+                    case 1:
+                        modificar(alvo);
+                        option = 0;
+                        break;
+                    case 2:
+                        desativarOuAtivar(alvo);
+                        option = 0;
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        throw new RuntimeException("ERRO: opção digitada inválida!");
+                }
+
+                Main.clear();
+            } while(option != 0);
+
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+            Main.continuar();
         }
+    }
+
+    // Método auxiliar para buscar um funcionário de acordo com um ID informado:
+    public static FuncionarioModel buscarFuncionario() throws Exception{
+        System.out.print("\n> Digite o ID do funcionário: ");
+        int idAlvo = Integer.parseInt(sc.nextLine().trim());
+
+        return service.buscarID(idAlvo);
+    }
+
+    // Procedimento para editar um funcionário:
+    public static void modificar(FuncionarioModel alvo){
+        try{
+            Main.clear();
+            sty.titulo("Modificar Funcionário");
+            System.out.print("Nome do funcionário: " + alvo.getNome_funcionario() + " -> ");
+            String nome = sc.nextLine().trim();
+            System.out.print("Email do funcionário: " + alvo.getEmail_funcionario() + " -> ");
+            String email = sc.nextLine().trim();
+            System.out.print("Senha do funcionário: ->");
+            String senha = sc.nextLine().trim();
+
+            System.out.println("Tipo de usuário: \n"
+                            + "1- Administrador \n"
+                            + "2- Funcionário"
+            );
+            System.out.print((alvo.isAdmin() ? "Administrador" : "Funcionário") + " -> ");
+            int tipo = Integer.parseInt(sc.nextLine().trim());
+            boolean admin;
+            if(tipo == 1){
+                admin = true;
+            } else if(tipo == 2){
+                admin = false;
+            } else{
+                throw new Exception("ERRO: opção digitada inválida!");
+            }
+
+            FuncionarioModel funcionario = new FuncionarioModel(alvo.getId_funcionario(), nome, email, senha, admin, alvo.isAtivo());
+            service.atualizar(funcionario);
+            sty.quadro("Funcionário modificado com sucesso!");
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
+
+        Main.continuar();
+    }
+
+    // Procedimento para desativar ou ativar um funcionário:
+    public static void desativarOuAtivar(FuncionarioModel alvo) throws Exception{
+        System.out.println("\nDeseja mesmo "
+                        + (alvo.isAtivo() ? "desativar" : "ativar")
+                        + " esse funcionário?: \n"
+                        + "1- Sim \n"
+                        + "2- Não"
+        );
+
+        int option = Integer.parseInt(sc.nextLine().trim());
+
+        switch (option) {
+            case 1:
+                // Define qual estado mudar:
+                boolean estado;
+                if(alvo.isAtivo()){
+                    estado = false;
+                } else{
+                    estado = true;
+                }
+
+                // Cria requisição:
+                service.desativarOuAtivar(
+                    alvo.getId_funcionario(),
+                    estado
+                );
+                sty.quadro("Funcionário " + (estado ? "ativado" : "desativado") + " com sucesso!");
+                break;
+            case 2:
+                break;
+            default:
+                throw new RuntimeException("ERRO: opção digitada inválida!");
+        }
+
+        Main.continuar();
+        Main.clear();
     }
 }

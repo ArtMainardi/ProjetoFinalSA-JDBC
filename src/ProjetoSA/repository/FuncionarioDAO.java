@@ -41,7 +41,7 @@ public class FuncionarioDAO {
     public ArrayList<FuncionarioModel> read() throws SQLException{
         // Cria a lista vazia:
         ArrayList<FuncionarioModel> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Funcionario";
+        String sql = "SELECT * FROM Funcionario WHERE ativo = true";
         
         // Faz a conexão, prepara e executa a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
@@ -135,6 +135,7 @@ public class FuncionarioDAO {
             stmt.setString(3, f.getSenha_funcionario());
             stmt.setBoolean(4, f.isAdmin());
             stmt.setBoolean(5, f.isAtivo());
+            stmt.setInt(6, f.getId_funcionario());
 
             // Executa e guarda a quantidade de linhas afetadas
             int linhasAfetadas = stmt.executeUpdate();
@@ -169,7 +170,7 @@ public class FuncionarioDAO {
     }
 
     public boolean verificarEmail(String email)throws SQLException{
-        String sql = "SELECT email_funcionario FROM Funcionario WHERE email_funcionario = ?";
+        String sql = "SELECT email_funcionario FROM Funcionario WHERE email_funcionario = ? AND ativo = true";
 
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -185,7 +186,7 @@ public class FuncionarioDAO {
     
     public boolean verificarSenha(String senha, String email)throws SQLException{
         // Procura senha do funcionário pelo email dele:
-        String sql = "SELECT senha_funcionario FROM Funcionario WHERE email_funcionario = ?";
+        String sql = "SELECT senha_funcionario FROM Funcionario WHERE email_funcionario = ? AND ativo = true";
 
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
