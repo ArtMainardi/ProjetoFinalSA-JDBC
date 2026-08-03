@@ -2,6 +2,7 @@ package ProjetoSA;
 import ProjetoSA.connection.Conexao;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.repository.FuncionarioDAO;
+import ProjetoSA.util.FuncionarioMain;
 import ProjetoSA.util.MovimentacaoMain;
 import ProjetoSA.util.ProdutoMain;
 import ProjetoSA.util.Style;
@@ -43,6 +44,7 @@ public class Main {
                         if(!usuarioAtual.isAdmin()){
                             throw new Exception("ERRO: opção digitada inválida!");
                         } else{
+                            FuncionarioMain.main(sty, sc);
                         }
                         break;
                     case 0:
