@@ -163,28 +163,38 @@ public class ProdutoMain {
         try{
             Main.clear();
             sty.titulo("Modificar Produto");
-            System.out.print("Nome do produto: "
-                            + alvo.getNome_produto()
-                            + " -> "
-            );
+            System.out.println("Observação: pressione ENTER nos dados em que você não deseja modificar: ");
+            System.out.print("Nome do produto: " + alvo.getNome_produto() + " -> ");
             String nome = sc.nextLine().trim();
-            System.out.print("Descrição do produto: "
-                            + alvo.getDescricao_produto()
-                            + " -> "
-            );
-            String descricao = sc.nextLine().trim();
-            System.out.print("Quantidade atual: "
-                            + alvo.getQtd_produto()
-                            + " -> "
-            );
-            int quantidade = Integer.parseInt(sc.nextLine().trim());
-            System.out.print("Quantidade mínima: "
-                            + alvo.getQtd_minima()
-                            + " -> "
-            );
-            int quantidadeMinima = Integer.parseInt(sc.nextLine().trim());
+            if(nome.isEmpty()){
+                nome = alvo.getNome_produto();
+            }
 
-            ProdutoModel produto = new ProdutoModel(nome, descricao, quantidade, quantidadeMinima, alvo.isAtivo());
+            System.out.print("Descrição do produto: " + alvo.getDescricao_produto() + " -> ");
+            String descricao = sc.nextLine().trim();
+            if(descricao.isEmpty()){
+                descricao = alvo.getDescricao_produto();
+            }
+
+            System.out.print("Quantidade atual: " + alvo.getQtd_produto() + " -> ");
+            String qtdTexto = sc.nextLine().trim();
+            int quantidade;
+            if(qtdTexto.isEmpty()){
+                quantidade = alvo.getQtd_produto();
+            } else{
+                quantidade = Integer.parseInt(qtdTexto);
+            }
+
+            System.out.print("Quantidade mínima: " + alvo.getQtd_minima() + " -> ");
+            String qtdMinTexto = sc.nextLine().trim();
+            int quantidadeMinima;
+            if(qtdMinTexto.isEmpty()){
+                quantidadeMinima = alvo.getQtd_minima();
+            } else{
+                quantidadeMinima = Integer.parseInt(qtdMinTexto);
+            }
+
+            ProdutoModel produto = new ProdutoModel( nome, descricao, quantidade, quantidadeMinima, alvo.isAtivo());
             produto.setId_produto(alvo.getId_produto());
             service.atualizar(produto);
             sty.quadro("Produto modificado com sucesso!");
