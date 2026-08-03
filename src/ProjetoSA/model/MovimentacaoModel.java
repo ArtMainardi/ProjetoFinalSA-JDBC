@@ -1,6 +1,7 @@
 package ProjetoSA.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class MovimentacaoModel {
     private int id_movimentacao;
@@ -92,5 +93,9 @@ public class MovimentacaoModel {
         // Retorna os dados formatados:
         return id_movimentacao + "  |  " + (produto.getNome_produto() + extra) + "  |  " + qtd_movimentacao
             + "  |  " + funcionario.getNome_funcionario() + " - ID " + funcionario.getId_funcionario();
+    }
+    public String dataFormatada(){
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return data_movimentacao.format(formato);
     }
 }

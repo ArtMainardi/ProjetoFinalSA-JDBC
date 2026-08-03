@@ -122,7 +122,7 @@ public class MovimentacaoMain {
                                 + "Funcionário: \n"
                                 + "  -> ID: " + alvo.getFuncionario().getId_funcionario() + "\n"
                                 + "  -> Nome: " + alvo.getFuncionario().getNome_funcionario() + "\n"
-                                + "Data da Movimentação: " + alvo.getData_movimentacao() + "\n"
+                                + "Data da Movimentação: " + alvo.dataFormatada() + "\n"
                                 + "Status: " + (alvo.isAtivo() ? "ATIVO" : "DESATIVO")
                 );
 
@@ -144,6 +144,8 @@ public class MovimentacaoMain {
                         case 2:
                             desativarOuAtivar(alvo);
                             option = 0;
+                            break;
+                        case 0:
                             break;
                         default:
                             throw new RuntimeException("ERRO: opção digitada inválida!");
@@ -171,26 +173,55 @@ public class MovimentacaoMain {
         try{
             Main.clear();
             sty.titulo("Modificar Movimentação");
-            // Definindo dados:
-            System.out.println("Tipo de movimentação: \n"
-                            + "1- Entrada \n"
+            System.out.println("Observação: pressione ENTER nos dados em que você não deseja modificar: ");
+            System.out.println("Tipo de movimentação: \n" 
+                            + "1- Entrada \n" 
                             + "2- Saída"
             );
             System.out.print(alvo.getTipo().getTipo() + " -> ");
-            int idTipo = sc.nextInt();
+            String tipoTexto = sc.nextLine().trim();
+            int idTipo;
+            if(tipoTexto.isEmpty()){
+                idTipo = alvo.getTipo().getId_tipo();
+            } else{
+                idTipo = Integer.parseInt(tipoTexto);
+            }
+
             System.out.print("ID do produto: " + alvo.getProduto().getId_produto() + " -> ");
-            int idProduto = sc.nextInt();
+            String produtoTexto = sc.nextLine().trim();
+            int idProduto;
+            if(produtoTexto.isEmpty()){
+                idProduto = alvo.getProduto().getId_produto();
+            } else{
+                idProduto = Integer.parseInt(produtoTexto);
+            }
+
             System.out.print("Quantidade do produto: " + alvo.getQtd_movimentacao() + " -> ");
-            int quantidade = sc.nextInt();
+            String quantidadeTexto = sc.nextLine().trim();
+            int quantidade;
+            if(quantidadeTexto.isEmpty()){
+                quantidade = alvo.getQtd_movimentacao();
+            } else{
+                quantidade = Integer.parseInt(quantidadeTexto);
+            }
+
             System.out.print("ID do funcionário: " + alvo.getFuncionario().getId_funcionario() + " -> ");
-            int idFuncionario = sc.nextInt();
-            System.out.print("Data da movimentação (DD/MM/AAAA, ou ENTER para data atual): " + alvo.getData_movimentacao() + " -> ");
-            sc.nextLine();
+            String funcionarioTexto = sc.nextLine().trim();
+            int idFuncionario;
+            if(funcionarioTexto.isEmpty()){
+                idFuncionario = alvo.getFuncionario().getId_funcionario();
+            } else{
+                idFuncionario = Integer.parseInt(funcionarioTexto);
+            }
+
+            System.out.print("Data da movimentação (DD/MM/AAAA): " + alvo.dataFormatada() + " -> ");
             String data = sc.nextLine().trim();
+            if(data.isEmpty()){
+                data = alvo.dataFormatada();
+            }
 
             MovimentacaoModel m = new MovimentacaoModel(quantidade);
             m.setId_movimentacao(alvo.getId_movimentacao());
-
             service.atualizar(m, data, idProduto, idFuncionario, idTipo);
             sty.quadro("Movimentação modificada com sucesso!");
         } catch(Exception e){
