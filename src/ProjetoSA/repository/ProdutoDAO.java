@@ -116,7 +116,7 @@ public class ProdutoDAO {
 
     // ATIVAR/DESATIVAR (SOFT DELETE):
     public boolean desativarOuAtivar(int id, boolean estado) throws SQLException {
-        String sql = "UPDATE FROM Produto SET ativo = ? WHERE id_produto = ?";
+        String sql = "UPDATE Produto SET ativo = ? WHERE id_produto = ?";
         
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {

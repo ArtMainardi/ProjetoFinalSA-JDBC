@@ -48,7 +48,7 @@ public class MovimentacaoDAO {
 
     // READ:
     public List<MovimentacaoModel> read() throws SQLException {
-        String sql = "SELECT id_movimentacao, qtd_movimentacao, data_movimentacao, id_funcionario, id_produto, id_tipo FROM Movimentacao";
+        String sql = "SELECT id_movimentacao, qtd_movimentacao, data_movimentacao, id_funcionario, id_produto, id_tipo, ativo FROM Movimentacao WHERE ativo = true";
         // Cria a lista:
         List<MovimentacaoModel> movimentacoes = new ArrayList<>();
 
@@ -69,9 +69,11 @@ public class MovimentacaoDAO {
                 // Procura tipo de moovimentação pelo ID:
                 TipoMovimentacaoDAO tipoMovimentacaoDAO = new TipoMovimentacaoDAO();
                 TipoMovimentacaoModel tipo = tipoMovimentacaoDAO.readId(rs.getInt("id_tipo"));
+                // Procura status:
+                boolean ativo = rs.getBoolean("ativo");
 
                 // Cria o objeto com os dados:
-                MovimentacaoModel m = new MovimentacaoModel(id, qtd, data, funcionario, produto, tipo);
+                MovimentacaoModel m = new MovimentacaoModel(id, qtd, data, funcionario, produto, tipo, ativo);
                 // Adiciona ele na lista:
                 movimentacoes.add(m);
             }
@@ -82,7 +84,7 @@ public class MovimentacaoDAO {
 
     // READ (ID): 
     public MovimentacaoModel readId(int idBusca) throws SQLException {
-        String sql = "SELECT id_movimentacao, qtd_movimentacao, data_movimentacao, id_funcionario, id_produto, id_tipo FROM Movimentacao WHERE id_movimentacao = ?";
+        String sql = "SELECT id_movimentacao, qtd_movimentacao, data_movimentacao, id_funcionario, id_produto, id_tipo, ativo FROM Movimentacao WHERE id_movimentacao = ?";
         
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {
@@ -106,9 +108,12 @@ public class MovimentacaoDAO {
                     // Procura tipo de moovimentação pelo ID:
                     TipoMovimentacaoDAO tipoMovimentacaoDAO = new TipoMovimentacaoDAO();
                     TipoMovimentacaoModel tipo = tipoMovimentacaoDAO.readId(rs.getInt("id_tipo"));
+                    // Procura status:
+                    boolean ativo = rs.getBoolean("ativo");
+
                     
                     // Retorna o objeto com os dados:
-                    return new MovimentacaoModel(id, qtd, data, funcionario, produto, tipo);
+                    return new MovimentacaoModel(id, qtd, data, funcionario, produto, tipo, ativo);
                 }
             }
         }
@@ -142,7 +147,7 @@ public class MovimentacaoDAO {
 
     // ATIVAR/DESATIVAR (SOFT DELETE):
     public boolean desativarOuAtivar(int id, boolean estado) throws SQLException {
-        String sql = "UPDATE FROM Movimentacao SET ativo = ? WHERE id_movimentacao = ?";
+        String sql = "UPDATE Movimentacao SET ativo = ? WHERE id_movimentacao = ?";
         
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {

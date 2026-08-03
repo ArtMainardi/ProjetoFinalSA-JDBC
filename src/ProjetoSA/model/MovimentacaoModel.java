@@ -11,13 +11,14 @@ public class MovimentacaoModel {
     private TipoMovimentacaoModel tipo;
     private boolean ativo = true;
 
-    public MovimentacaoModel(int id_movimentacao, int qtd_movimentacao, LocalDate data_movimentacao, FuncionarioModel funcionario, ProdutoModel produto, TipoMovimentacaoModel tipo) {
+    public MovimentacaoModel(int id_movimentacao, int qtd_movimentacao, LocalDate data_movimentacao, FuncionarioModel funcionario, ProdutoModel produto, TipoMovimentacaoModel tipo, boolean ativo) {
         this.id_movimentacao = id_movimentacao;
         this.qtd_movimentacao = qtd_movimentacao;
         this.data_movimentacao = data_movimentacao;
         this.funcionario = funcionario;
         this.produto = produto;
         this.tipo = tipo;
+        this.ativo = ativo;
     }
     // Construtor para cadastro:
     public MovimentacaoModel(int qtd_movimentacao) {

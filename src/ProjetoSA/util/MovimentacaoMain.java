@@ -123,6 +123,7 @@ public class MovimentacaoMain {
                                 + "  -> ID: " + alvo.getFuncionario().getId_funcionario() + "\n"
                                 + "  -> Nome: " + alvo.getFuncionario().getNome_funcionario() + "\n"
                                 + "Data da Movimentação: " + alvo.getData_movimentacao() + "\n"
+                                + "Status: " + (alvo.isAtivo() ? "ATIVO" : "DESATIVO")
                 );
 
                 // Verifica tipo de usuário:
@@ -130,7 +131,7 @@ public class MovimentacaoMain {
                     // Mostra menu de opções: 
                     System.out.println("\n\nDigite uma opção: \n"
                                     + "1- Editar Movimentação \n"
-                                    + "2- Excluir Movimentação \n"
+                                    + "2- " + (alvo.isAtivo() ? "Desativar" : "Ativar") + " Movimentação \n"
                                     + "0- Voltar"
                     );
                     option = Integer.parseInt(sc.nextLine().trim());
@@ -140,8 +141,12 @@ public class MovimentacaoMain {
                             modificar(alvo);
                             option = 0;
                             break;
-                        default:
+                        case 2:
+                            desativarOuAtivar(alvo);
+                            option = 0;
                             break;
+                        default:
+                            throw new RuntimeException("ERRO: opção digitada inválida!");
                     }
                 } else{
                     System.out.println(); // Espaçamento
@@ -192,5 +197,34 @@ public class MovimentacaoMain {
             sty.quadro(e.getMessage());
         }
         Main.continuar();
+    }
+
+    // Procedimento para desativar ou ativar um dado:
+    public static void desativarOuAtivar(MovimentacaoModel alvo) throws SQLException{
+        System.out.println("\nDeseja mesmo " + (alvo.isAtivo() ? "desativar" : "ativar") + " essa movimentação?: \n"
+                        + "1- Sim \n"
+                        + "2- Não"
+        );
+        int option = Integer.parseInt(sc.nextLine().trim());
+        switch (option) {
+            case 1:
+                // Define qual estado mudar:
+                boolean estado;
+                if(alvo.isAtivo()){
+                    estado = false;
+                } else{
+                    estado = true;
+                }
+                // Cria requisição:
+                service.desativarOuAtivar(alvo.getId_movimentacao(), estado);
+                sty.quadro("Movimentação " + (estado ? "ativada" : "desativada") + " com sucesso!");
+                break;
+            case 2:
+                break;
+            default:
+                throw new RuntimeException("ERRO: opção digitada inválida!");
+        }
+        Main.continuar();
+        Main.clear();
     }
 }
