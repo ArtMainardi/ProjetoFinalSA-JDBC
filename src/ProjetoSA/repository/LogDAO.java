@@ -13,6 +13,7 @@ import ProjetoSA.connection.Conexao;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.model.LogModel;
 import ProjetoSA.service.FuncionarioService;
+import ProjetoSA.util.Style;
 
 public class LogDAO{
     Conexao conexao = new Conexao();
@@ -66,5 +67,27 @@ public class LogDAO{
             }
         }
         return lista;
+    }
+
+    public static void registrar(Integer idFuncionario, String acao, String detalhes) {
+        Conexao c = new Conexao();
+        String sql = "INSERT INTO LogSistema (id_funcionario, acao, detalhes) VALUES (?, ?, ?)";
+
+        // Faz conexão e prepara a query:
+        try(Connection conn = c.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+            // Define os dados:
+            if (idFuncionario != null) {
+                stmt.setInt(1, idFuncionario);
+            } else {
+                stmt.setNull(1, java.sql.Types.INTEGER);
+            }
+            stmt.setString(2, acao);
+            stmt.setString(3, detalhes);
+            // Executa a query:
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            Style sty = new Style();
+            sty.quadro("Falha ao gravar log no banco: " + e.getMessage());
+        }
     }
 }
