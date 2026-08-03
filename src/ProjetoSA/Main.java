@@ -53,8 +53,9 @@ public class Main {
                         throw new Exception("ERRO: opção digitada inválida!");
                 }
             } catch(Exception e){
-                System.out.println(e.getMessage() + "\n");
+                sty.quadro(e.getMessage());
                 continuar();
+                clear();
             }
         } while(option != 0);
 
