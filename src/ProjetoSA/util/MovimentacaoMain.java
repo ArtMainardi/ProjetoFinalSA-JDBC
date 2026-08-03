@@ -1,8 +1,6 @@
 package ProjetoSA.util;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -136,6 +134,15 @@ public class MovimentacaoMain {
                                     + "0- Voltar"
                     );
                     option = Integer.parseInt(sc.nextLine().trim());
+                    // Submenu das movimentações:
+                    switch (option) {
+                        case 1:
+                            modificar(alvo);
+                            option = 0;
+                            break;
+                        default:
+                            break;
+                    }
                 } else{
                     System.out.println(); // Espaçamento
                     Main.continuar();
@@ -152,5 +159,38 @@ public class MovimentacaoMain {
         System.out.print("\n> Digite o ID da movimentação: ");
         int idAlvo = Integer.parseInt(sc.nextLine().trim());
         return service.buscarId(idAlvo);
+    }
+
+    // Procedimento para editar um dado:
+    public static void modificar(MovimentacaoModel alvo){
+        try{
+            Main.clear();
+            sty.titulo("Modificar Movimentação");
+            // Definindo dados:
+            System.out.println("Tipo de movimentação: \n"
+                            + "1- Entrada \n"
+                            + "2- Saída"
+            );
+            System.out.print(alvo.getTipo().getTipo() + " -> ");
+            int idTipo = sc.nextInt();
+            System.out.print("ID do produto: " + alvo.getProduto().getId_produto() + " -> ");
+            int idProduto = sc.nextInt();
+            System.out.print("Quantidade do produto: " + alvo.getQtd_movimentacao() + " -> ");
+            int quantidade = sc.nextInt();
+            System.out.print("ID do funcionário: " + alvo.getFuncionario().getId_funcionario() + " -> ");
+            int idFuncionario = sc.nextInt();
+            System.out.print("Data da movimentação (DD/MM/AAAA, ou ENTER para data atual): " + alvo.getData_movimentacao() + " -> ");
+            sc.nextLine();
+            String data = sc.nextLine().trim();
+
+            MovimentacaoModel m = new MovimentacaoModel(quantidade);
+            m.setId_movimentacao(alvo.getId_movimentacao());
+
+            service.atualizar(m, data, idProduto, idFuncionario, idTipo);
+            sty.quadro("Movimentação modificada com sucesso!");
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
+        Main.continuar();
     }
 }
