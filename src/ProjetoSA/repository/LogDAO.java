@@ -5,9 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.model.LogModel;
+import ProjetoSA.service.FuncionarioService;
 
 public class LogDAO{
     Conexao conexao = new Conexao();
@@ -36,5 +41,30 @@ public class LogDAO{
             }
             return l;
         }
+    }
+
+    // READ:
+    public List<LogModel> read() throws SQLException{
+        List<LogModel> lista = new ArrayList<>();
+        String sql = "SELECT * FROM LogSistem";
+
+        // Faz a conexão e executa a query:
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
+            // Verifica se encontrou algum dado:
+            while(rs.next()){
+                int id = rs.getInt("id_log");
+                LocalDateTime dataHora = rs.getObject("data_hora", LocalDateTime.class);
+                int idFuncionario = rs.getInt("id_funcionario");
+                // --
+                FuncionarioService fService = new FuncionarioService();
+                FuncionarioModel funcionario = fService.buscarID(idFuncionario);
+                //--
+                String acao = rs.getString("acao");
+                String detalhes = rs.getString("detalhes");
+
+                lista.add(new LogModel(id, dataHora, funcionario, acao, detalhes));
+            }
+        }
+        return lista;
     }
 }
