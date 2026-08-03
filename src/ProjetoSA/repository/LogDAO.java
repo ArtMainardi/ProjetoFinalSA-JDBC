@@ -19,7 +19,7 @@ public class LogDAO{
 
     // CREATE:
     public LogModel create(LogModel l) throws SQLException{
-        String sql = "INSERT INTO LogSistem (data_hora, id_funcionario, acao, detalhes) values (?, ?, ?, ?)";
+        String sql = "INSERT INTO LogSistema (data_hora, id_funcionario, acao, detalhes) values (?, ?, ?, ?)";
 
         // Faz conexão e prepara a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
@@ -46,7 +46,7 @@ public class LogDAO{
     // READ:
     public List<LogModel> read() throws SQLException{
         List<LogModel> lista = new ArrayList<>();
-        String sql = "SELECT * FROM LogSistem";
+        String sql = "SELECT * FROM LogSistema";
 
         // Faz a conexão e executa a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
@@ -70,7 +70,7 @@ public class LogDAO{
 
     public static void registrar(Integer idFuncionario, String acao, String detalhes) {
         Conexao c = new Conexao();
-        String sql = "INSERT INTO LogSistem (id_funcionario, acao, detalhes) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO LogSistema (id_funcionario, acao, detalhes) VALUES (?, ?, ?)";
 
         // Faz conexão e prepara a query:
         try(Connection conn = c.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
