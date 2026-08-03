@@ -1,4 +1,5 @@
 package ProjetoSA.repository;
+import ProjetoSA.Main;
 import ProjetoSA.connection.Conexao;
 import ProjetoSA.model.ProdutoModel;
 import java.sql.Connection;
@@ -31,13 +32,19 @@ public class ProdutoDAO {
             try (ResultSet rs = stmt.getGeneratedKeys()){
                 if(rs.next()){
                     p.setId_produto(rs.getInt(1));
+
+                    //Log: 
+                    LogDAO.registrar(Main.getIdUsuarioAtual(), "CADASTROU_PRODUTO", 
+                    "Cadastrou o produto " + p.getNome_produto() + " (ID: " + p.getId_produto() + ").");
+
+                     // Retorna o produto com o ID gerado:
+                    return p;
+
                 } else{
                     throw new SQLException("Falha ao inserir produto, nenhum ID foi gerado.");
                 }
             }
         }
-        // Retorna o produto com o ID gerado:
-        return p;
     }
 
     // READ:
@@ -96,6 +103,9 @@ public class ProdutoDAO {
     public ProdutoModel update(ProdutoModel produtoModificado) throws SQLException{
         String sql = "UPDATE Produto SET nome_produto = ?, descricao_produto = ?, qtd_produto = ?, qtd_minima = ?, ativo = ? WHERE id_produto = ?";
 
+        // Salva estado anterior:
+        ProdutoModel anterior = readId(produtoModificado.getId_produto());
+
         // Faz a conexão e prepara a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
             // Define os dados da query:
@@ -111,8 +121,30 @@ public class ProdutoDAO {
             if(linhasAfetadas == 0){
                 return null;
             }
+
+            // Log: 
+            String log = "";
+            if(!anterior.getNome_produto().equals(produtoModificado.getNome_produto())){
+                log += "Nome : " + anterior.getNome_produto() + " -> " + produtoModificado.getNome_produto() + " | ";
+             }
+            if(!anterior.getDescricao_produto().equals(produtoModificado.getDescricao_produto())){
+                log += "Descrição: " + anterior.getDescricao_produto() + " -> " + produtoModificado.getDescricao_produto() + " | ";
+             }
+            if(anterior.getQtd_produto() != produtoModificado.getQtd_produto()){
+                log += "Quantidade: " + anterior.getQtd_produto() + " -> " + produtoModificado.getQtd_produto() + " | ";
+            }
+            if(anterior.getQtd_minima() != produtoModificado.getQtd_minima()){
+                log += "Quantidade mínima: " + anterior.getQtd_minima() + " -> " + produtoModificado.getQtd_minima() + " | ";
+             }
+            if(anterior.isAtivo() != produtoModificado.isAtivo()){
+                log += "Status: " + (!anterior.isAtivo() ? "DESATIVO -> ATIVO" : "ATIVO -> DESATIVO") + " | ";
+            }
+            LogDAO.registrar(Main.getIdUsuarioAtual(), "ATUALIZOU_PRODUTO",
+                 "Atualizou o produto " + produtoModificado.getNome_produto() + "(ID: " + produtoModificado.getId_produto() + "). Mudanças feitas: " + (log.trim().isEmpty() ? "Nenhuma" : log));
+
+         return produtoModificado;
+
         }
-        return produtoModificado;
     }
 
     // ATIVAR/DESATIVAR (SOFT DELETE):
@@ -127,10 +159,15 @@ public class ProdutoDAO {
 
             // Executa a query e verifica se atualizou o dado:
             int linhas = stmt.executeUpdate();
-            if(linhas == 0){
-                return false;
+            if(linhas > 0){  
+                 // Log:
+                LogDAO.registrar(Main.getIdUsuarioAtual(), ((estado ? "ATIVOU" : "DESATIVOU ") + "_PRODUTO"), 
+                (estado ? "Ativou" : "Desativou") + " o produto com ID: " + id + ".");
+              return true;
+
             } else{
-                return true;
+                return false;
+              
             }
         }
     }
