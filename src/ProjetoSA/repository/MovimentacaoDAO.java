@@ -282,22 +282,77 @@ public class MovimentacaoDAO {
     // ATIVAR/DESATIVAR (SOFT DELETE):
     public boolean desativarOuAtivar(int id, boolean estado) throws SQLException {
         String sql = "UPDATE Movimentacao SET ativo = ? WHERE id_movimentacao = ?";
+        // Salva estado anterior:
+        MovimentacaoModel anterior = readId(id);
+        // Query para restaurar o estoque do produto:
+        String sqlRestaurarProduto;
+        boolean treeParameters = false;
+        if(anterior.getTipo().getTipo().equals("Entrada")){
+            if(anterior.isAtivo()){
+                sqlRestaurarProduto = "UPDATE Produto SET qtd_produto = qtd_produto - ? WHERE id_produto = ? AND qtd_produto >= ?";
+                treeParameters = true;
+            } else{
+                sqlRestaurarProduto = "UPDATE Produto SET qtd_produto = qtd_produto + ? WHERE id_produto = ?";
+            }
+        } else{
+            if(!anterior.isAtivo()){
+                sqlRestaurarProduto = "UPDATE Produto SET qtd_produto = qtd_produto - ? WHERE id_produto = ? AND qtd_produto >= ?";
+                treeParameters = true;
+            } else{
+                sqlRestaurarProduto = "UPDATE Produto SET qtd_produto = qtd_produto + ? WHERE id_produto = ?";
+            }
+        }
         
-        // Faz a conexão e prepara a query:
-        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {
-            // Define os dados da query:
-            stmt.setBoolean(1, estado);
-            stmt.setInt(2, id);
+        Connection conn = null;
+        try{
+            conn = conexao.conectar();
+            conn.setAutoCommit(false);
 
-            // Executa a query e verifica se atualizou o dado::
-            int linhas = stmt.executeUpdate();
-            if(linhas > 0){
-                // Log:
-                LogDAO.registrar(Main.getIdUsuarioAtual(), ((estado ? "ATIVOU" : "DESATIVOU") + "_MOVIMENTACAO"),
-                    (estado ? "Ativou" : "Desativou") + " a movimentação com ID: " + id + ".");
-                return true;
-            } else {
-                return false;
+            // Prepara a query para restauração do Produto:
+            try(PreparedStatement rStmt = conn.prepareStatement(sqlRestaurarProduto)){
+                // Define dados da query:
+                rStmt.setInt(1, anterior.getQtd_movimentacao());
+                rStmt.setInt(2, anterior.getProduto().getId_produto());
+                if(treeParameters){
+                    rStmt.setInt(3, anterior.getQtd_movimentacao());
+                }
+
+                // Executa e verifica:
+                int linhas = rStmt.executeUpdate();
+                if(linhas == 0){
+                    conn.rollback();
+                    throw new RuntimeException("ERRO: falha ao restaurar o estoque do produto!");
+                }
+            }
+
+            // Prepara a query para atualizar a movimentação:
+            try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+                // Define os dados da query:
+                stmt.setBoolean(1, estado);
+                stmt.setInt(2, id);
+
+                // Executa a query e verifica se atualizou o dado::
+                int linhas = stmt.executeUpdate();
+                if(linhas > 0){
+                    // Log:
+                    LogDAO.registrar(Main.getIdUsuarioAtual(), ((estado ? "ATIVOU" : "DESATIVOU") + "_MOVIMENTACAO"),
+                        (estado ? "Ativou" : "Desativou") + " a movimentação com ID: " + id + ".");
+                    conn.commit();
+                    return true;
+                } else {
+                    conn.rollback();
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+        } finally {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
             }
         }
     }
