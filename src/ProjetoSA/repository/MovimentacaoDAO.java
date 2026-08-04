@@ -125,6 +125,41 @@ public class MovimentacaoDAO {
         // Retorna a lista:
         return movimentacoes;
     }
+    //metodo readDesativados
+    public List<MovimentacaoModel> readDesativados() throws SQLException {
+        String sql = "SELECT id_movimentacao, qtd_movimentacao, data_movimentacao, id_funcionario, id_produto, id_tipo, ativo FROM Movimentacao WHERE ativo = false";
+        // Cria a lista:
+        List<MovimentacaoModel> movimentacoes = new ArrayList<>();
+
+        // Faz conexão e executa a query:
+        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            // Adiciona todos os dados na lista:
+            while (rs.next()) {
+                // Define os dados do objeto:
+                int id = rs.getInt("id_movimentacao");
+                int qtd = rs.getInt("qtd_movimentacao");
+                LocalDate data = rs.getObject("data_movimentacao", LocalDate.class);
+                // Procura funcionário pelo ID:
+                FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+                FuncionarioModel funcionario = funcionarioDAO.readId(rs.getInt("id_funcionario"));
+                // Procura produto pelo ID:
+                ProdutoDAO produtoDAO = new ProdutoDAO();
+                ProdutoModel produto = produtoDAO.readId(rs.getInt("id_produto"));
+                // Procura tipo de moovimentação pelo ID:
+                TipoMovimentacaoDAO tipoMovimentacaoDAO = new TipoMovimentacaoDAO();
+                TipoMovimentacaoModel tipo = tipoMovimentacaoDAO.readId(rs.getInt("id_tipo"));
+                // Procura status:
+                boolean ativo = rs.getBoolean("false");
+
+                // Cria o objeto com os dados:
+                MovimentacaoModel m = new MovimentacaoModel(id, qtd, data, funcionario, produto, tipo, ativo);
+                // Adiciona ele na lista:
+                movimentacoes.add(m);
+            }
+        }
+        // Retorna a lista:
+        return movimentacoes;
+    }
 
     // READ (ID): 
     public MovimentacaoModel readId(int idBusca) throws SQLException {
