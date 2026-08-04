@@ -7,6 +7,7 @@ import ProjetoSA.repository.FuncionarioDAO;
 import ProjetoSA.util.FuncionarioMain;
 import ProjetoSA.util.MovimentacaoMain;
 import ProjetoSA.util.ProdutoMain;
+import ProjetoSA.util.RelatorioMain;
 import ProjetoSA.util.Style;
 
 public class Main {
@@ -30,6 +31,8 @@ public class Main {
                                 + "1- Movimentações \n"
                                 + "2- Produtos \n"
                                 + (usuarioAtual.isAdmin() ? "3- Funcionários \n" : "")
+                                
+                                + (usuarioAtual.isAdmin() ? "4- " : "3- ") + "Relatórios \n"
                                 + "0- Sair");
                 option = Integer.parseInt(sc.nextLine().trim());
                 
@@ -46,6 +49,9 @@ public class Main {
                         } else{
                             FuncionarioMain.main(sty, sc);
                         }
+                        break;
+                    case 4:
+                        RelatorioMain.main(sty, sc);
                         break;
                     case 0:
                         break;
