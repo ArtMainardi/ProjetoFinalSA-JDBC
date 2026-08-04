@@ -1,12 +1,13 @@
 package ProjetoSA.util;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
+
 import ProjetoSA.Main;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.model.MovimentacaoModel;
 import ProjetoSA.service.MovimentacaoService;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Scanner;
 
 public class MovimentacaoMain {
     static Style sty;
@@ -28,7 +29,7 @@ public class MovimentacaoMain {
                                 + "1 - Visualizar Histórico Geral \n"
                                 + "2 - Registrar Movimentação \n"
                                 + "3 - Detalhes de uma Movimentação \n"
-                                + "4 - Mostrar movimentações desativadas"
+                                + "4 - Mostrar movimentações desativadas \n"
                                 + "0- Voltar");
                 option = Integer.parseInt(sc.nextLine().trim());
                 switch (option) {

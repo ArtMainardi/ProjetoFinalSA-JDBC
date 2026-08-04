@@ -1,10 +1,11 @@
 package ProjetoSA.service;
 
 
-import ProjetoSA.model.FuncionarioModel;
-import ProjetoSA.repository.FuncionarioDAO;
 import java.sql.SQLException;
 import java.util.List;
+
+import ProjetoSA.model.FuncionarioModel;
+import ProjetoSA.repository.FuncionarioDAO;
 
 public class FuncionarioService {
     private FuncionarioDAO repository = new FuncionarioDAO();
@@ -31,7 +32,8 @@ public class FuncionarioService {
         // Retorna a lista:
         return lista;
     }
-     // Listar Desativados:
+    
+    // Listar Desativados:
     public List<FuncionarioModel> listarDesativados() throws SQLException{
         // Cria a lista e envia a requisição para o repository:
         List<FuncionarioModel> lista = repository.readDesativados();

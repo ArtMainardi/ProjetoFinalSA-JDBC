@@ -1,11 +1,5 @@
 package ProjetoSA.repository;
 
-import ProjetoSA.Main;
-import ProjetoSA.connection.Conexao;
-import ProjetoSA.model.FuncionarioModel;
-import ProjetoSA.model.MovimentacaoModel;
-import ProjetoSA.model.ProdutoModel;
-import ProjetoSA.model.TipoMovimentacaoModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +8,13 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import ProjetoSA.Main;
+import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.FuncionarioModel;
+import ProjetoSA.model.MovimentacaoModel;
+import ProjetoSA.model.ProdutoModel;
+import ProjetoSA.model.TipoMovimentacaoModel;
 
 public class MovimentacaoDAO {
     private Conexao conexao = new Conexao();
@@ -125,7 +126,8 @@ public class MovimentacaoDAO {
         // Retorna a lista:
         return movimentacoes;
     }
-    //metodo readDesativados
+    
+    //READ (DESATIVADOS):
     public List<MovimentacaoModel> readDesativados() throws SQLException {
         String sql = "SELECT id_movimentacao, qtd_movimentacao, data_movimentacao, id_funcionario, id_produto, id_tipo, ativo FROM Movimentacao WHERE ativo = false";
         // Cria a lista:
@@ -149,7 +151,7 @@ public class MovimentacaoDAO {
                 TipoMovimentacaoDAO tipoMovimentacaoDAO = new TipoMovimentacaoDAO();
                 TipoMovimentacaoModel tipo = tipoMovimentacaoDAO.readId(rs.getInt("id_tipo"));
                 // Procura status:
-                boolean ativo = rs.getBoolean("false");
+                boolean ativo = rs.getBoolean("ativo");
 
                 // Cria o objeto com os dados:
                 MovimentacaoModel m = new MovimentacaoModel(id, qtd, data, funcionario, produto, tipo, ativo);
