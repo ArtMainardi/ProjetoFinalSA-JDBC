@@ -1,5 +1,6 @@
 package ProjetoSA.repository;
 
+import ProjetoSA.Main;
 import ProjetoSA.connection.Conexao;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.model.MovimentacaoModel;
@@ -36,14 +37,18 @@ public class MovimentacaoDAO {
             try (ResultSet rs = stmt.getGeneratedKeys()){
                 if(rs.next()){
                     m.setId_movimentacao(rs.getInt(1));
+
+                    // Log:
+                    LogDAO.registrar(Main.getIdUsuarioAtual(), "CADASTROU_MOVIMENTACAO", 
+                        "Cadastrou a movimentação (ID: " + m.getId_movimentacao() + "). ");
+                         return m;
+
                 } else{
                     throw new SQLException("Falha ao inserir movimentação, nenhum ID foi gerado.");
                 }
             }
         }
-
-        // Retorna objeto com o ID gerado:
-        return m;
+        
     }
 
     // READ:
@@ -123,6 +128,8 @@ public class MovimentacaoDAO {
     // UPDATE:
     public MovimentacaoModel update(MovimentacaoModel m) throws SQLException {
         String sql = "UPDATE Movimentacao SET qtd_movimentacao = ?, data_movimentacao = ?, id_funcionario = ?, id_produto = ?, id_tipo = ? WHERE id_movimentacao = ?";
+            // Salva estado anterior:
+            MovimentacaoModel anterior = readId(m.getId_movimentacao());
         
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {
@@ -141,6 +148,21 @@ public class MovimentacaoDAO {
             if (linhasAfetadas == 0) {
                 return null;
             }
+
+            // Log
+            String log = "";
+            if(anterior.getQtd_movimentacao() != m.getQtd_movimentacao()){
+                log += "Quantidade: " + anterior.getQtd_movimentacao() + " -> " + m.getQtd_movimentacao() + " | ";
+            }
+            if(anterior.getData_movimentacao() != m.getData_movimentacao()){
+                log += "Data da movimentação: " + anterior.getData_movimentacao() + " -> " + m.getData_movimentacao() + " | ";
+            }
+            if(anterior.isAtivo() != m.isAtivo()){
+                log += "Status: " + (!anterior.isAtivo() ? "DESATIVO -> ATIVO" : "ATIVO -> DESATIVO") + " | ";
+            } 
+            LogDAO.registrar(Main.getIdUsuarioAtual(), "ATUALIZOU_MOVIMENTACAO",
+                "Atualizou a movimentação (ID: " + m.getId_movimentacao() + "). Mudanças feitas: " + (log.trim().isEmpty() ? "Nenhuma" : log));
+
             return m;
         }
     }
@@ -157,10 +179,13 @@ public class MovimentacaoDAO {
 
             // Executa a query e verifica se atualizou o dado::
             int linhas = stmt.executeUpdate();
-            if(linhas == 0){
-                return false;
-            } else{
+            if(linhas > 0){
+                // Log:
+                LogDAO.registrar(Main.getIdUsuarioAtual(), ((estado ? "ATIVOU" : "DESATIVOU") + "_MOVIMENTACAO"),
+                    (estado ? "Ativou" : "Desativou") + " a movimentação com ID: " + id + ".");
                 return true;
+            } else {
+                return false;
             }
         }
     }
