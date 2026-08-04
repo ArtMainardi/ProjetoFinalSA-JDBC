@@ -1,11 +1,10 @@
 package ProjetoSA.util;
 
-import java.util.List;
-import java.util.Scanner;
-
 import ProjetoSA.Main;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.service.FuncionarioService;
+import java.util.List;
+import java.util.Scanner;
 
 public class FuncionarioMain {
     static Style sty;
@@ -24,10 +23,11 @@ public class FuncionarioMain {
             try{
                 sty.titulo("Funcionários");
                 System.out.println("Digite uma opção: \n"
-                                + "1- Listar todos os Funcionários \n"
-                                + "2- Cadastrar Funcionário \n"
-                                + "3- Detalhes de um Funcionário \n"
-                                + "0- Voltar");
+                                + "1 - Listar todos os Funcionários \n"
+                                + "2 - Cadastrar Funcionário \n"
+                                + "3 - Detalhes de um Funcionário \n"
+                                + "4 - Listar Funcionarios Desativados \n"
+                                + "0 - Voltar");
                 option = Integer.parseInt(sc.nextLine().trim());
 
                 switch (option) {
@@ -41,6 +41,10 @@ public class FuncionarioMain {
                         break;
                     case 3:
                         detalhesFuncionario();
+                        break;
+                    case 4:
+                        mostrarDesativados();
+                        Main.continuar();
                         break;
                     case 0:
                         break;
@@ -260,5 +264,21 @@ public class FuncionarioMain {
 
         Main.continuar();
         Main.clear();
+    }
+    public static void mostrarDesativados(){
+        try{
+            Main.clear();
+            sty.titulo("Funcionarios Desativados");
+            sty.quadro("ID   |     Nome     |   Email   |   Senha   |   Admin   |");
+
+            // Faz a requisição:
+            List<FuncionarioModel> funcionarios = service.listarDesativados();
+            // Lista os produtos na tela:
+            for(FuncionarioModel f : funcionarios){
+                sty.quadro(f.mostrarDados());
+            }
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
     }
 }
