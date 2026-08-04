@@ -92,7 +92,7 @@ public class MovimentacaoModel {
         }
         // Retorna os dados formatados:
         return id_movimentacao + "  |  " + (produto.getNome_produto() + extra) + "  |  " + qtd_movimentacao
-            + "  |  " + funcionario.getNome_funcionario() + " - ID " + funcionario.getId_funcionario();
+            + "  |  " + tipo.getTipo() + "  |  " + funcionario.getNome_funcionario() + " - ID " + funcionario.getId_funcionario();
     }
     public String dataFormatada(){
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
