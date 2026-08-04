@@ -58,6 +58,18 @@ public class MovimentacaoService {
         // Retorna a lista:
         return lista;
     }
+    // Listar Desativados:
+    public List<MovimentacaoModel> listarDesativados() throws SQLException{
+        // Cria lista e manda requisição para o repository:
+        List<MovimentacaoModel> lista;
+        lista = repository.read();
+        // Verifica se encontrou algum dado:
+        if(lista == null || lista.isEmpty()){
+            throw new RuntimeException("Erro: Nenhuma movimentação desarivada!");
+        }
+        // Retorna a lista:
+        return lista;
+    }
 
     // Buscar (ID):
     public MovimentacaoModel buscarId(int id) throws SQLException{
