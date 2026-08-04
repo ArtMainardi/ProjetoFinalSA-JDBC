@@ -99,6 +99,29 @@ public class ProdutoDAO {
         return null;
     }
 
+    // READ (DESATIVADOS):
+    public ArrayList<ProdutoModel> readDesativados() throws SQLException{
+        ArrayList<ProdutoModel> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Produto WHERE ativo = false";
+
+        // Faz a conexão e executa a query:
+        try(Connection conn = conexao.conectar(); Statement stmt = conn.createStatement(); ResultSet resultado = stmt.executeQuery(sql);){
+            // Adiciona todos os dados na lista:
+            while(resultado.next()){
+                int id_produto = resultado.getInt("id_produto");
+                String nome_produto = resultado.getString("nome_produto");
+                String descricao_produto = resultado.getString("descricao_produto");
+                int qtd_produto = resultado.getInt("qtd_produto");
+                int qtd_minima = resultado.getInt("qtd_minima");
+                boolean ativo = resultado.getBoolean("ativo");
+
+                // Cria o objeto com os dados e insere ele na lista:
+                lista.add(new ProdutoModel(id_produto,nome_produto, descricao_produto, qtd_produto, qtd_minima, ativo));
+            }
+            return lista;
+        }
+    }
+
     // UPDATE:
     public ProdutoModel update(ProdutoModel produtoModificado) throws SQLException{
         String sql = "UPDATE Produto SET nome_produto = ?, descricao_produto = ?, qtd_produto = ?, qtd_minima = ?, ativo = ? WHERE id_produto = ?";
