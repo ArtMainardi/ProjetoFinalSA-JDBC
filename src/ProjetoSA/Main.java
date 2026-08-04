@@ -5,6 +5,7 @@ import ProjetoSA.connection.Conexao;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.repository.FuncionarioDAO;
 import ProjetoSA.util.FuncionarioMain;
+import ProjetoSA.util.LogMain;
 import ProjetoSA.util.MovimentacaoMain;
 import ProjetoSA.util.ProdutoMain;
 import ProjetoSA.util.RelatorioMain;
@@ -31,8 +32,8 @@ public class Main {
                                 + "1- Movimentações \n"
                                 + "2- Produtos \n"
                                 + (usuarioAtual.isAdmin() ? "3- Funcionários \n" : "")
-                                
                                 + (usuarioAtual.isAdmin() ? "4- " : "3- ") + "Relatórios \n"
+                                + (usuarioAtual.isAdmin() ? "5- Log do Sistema \n" : "")
                                 + "0- Sair");
                 option = Integer.parseInt(sc.nextLine().trim());
                 
@@ -45,13 +46,24 @@ public class Main {
                         break;
                     case 3:
                         if(!usuarioAtual.isAdmin()){
-                            throw new Exception("ERRO: opção digitada inválida!");
+                            RelatorioMain.main(sty, sc);
                         } else{
                             FuncionarioMain.main(sty, sc, usuarioAtual);
                         }
                         break;
                     case 4:
-                        RelatorioMain.main(sty, sc);
+                        if(!usuarioAtual.isAdmin()){
+                            throw new Exception("ERRO: opção digitada inválida!");
+                        } else{
+                            RelatorioMain.main(sty, sc);
+                        }
+                        break;
+                    case 5:
+                        if(!usuarioAtual.isAdmin()){
+                            throw new Exception("ERRO: opção digitada inválida!");
+                        } else{
+                            LogMain.main(sty, sc);
+                        }
                         break;
                     case 0:
                         break;

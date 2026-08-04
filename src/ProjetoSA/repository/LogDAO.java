@@ -1,10 +1,5 @@
 package ProjetoSA.repository;
 
-import ProjetoSA.connection.Conexao;
-import ProjetoSA.model.FuncionarioModel;
-import ProjetoSA.model.LogModel;
-import ProjetoSA.service.FuncionarioService;
-import ProjetoSA.util.Style;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +8,12 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.FuncionarioModel;
+import ProjetoSA.model.LogModel;
+import ProjetoSA.service.FuncionarioService;
+import ProjetoSA.util.Style;
 
 public class LogDAO{
     Conexao conexao = new Conexao();
@@ -54,10 +55,15 @@ public class LogDAO{
             while(rs.next()){
                 int id = rs.getInt("id_log");
                 LocalDateTime dataHora = rs.getObject("data_hora", LocalDateTime.class);
-                int idFuncionario = rs.getInt("id_funcionario");
+                Integer idFuncionario = rs.getInt("id_funcionario");
                 // --
                 FuncionarioService fService = new FuncionarioService();
-                FuncionarioModel funcionario = fService.buscarID(idFuncionario);
+                FuncionarioModel funcionario;
+                if(idFuncionario != 0){
+                    funcionario = fService.buscarID(idFuncionario);
+                } else{
+                    funcionario = null;
+                }
                 //--
                 String acao = rs.getString("acao");
                 String detalhes = rs.getString("detalhes");
@@ -66,6 +72,35 @@ public class LogDAO{
             }
         }
         return lista;
+    }
+
+    // READ (ID):
+    public LogModel readId(int id) throws SQLException {
+        String sql = "SELECT * FROM LogSistema WHERE id_log = ?";
+
+        // Faz a conexão e prepara a query:
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+            // Define os dados da query:
+            stmt.setInt(1, id);
+
+            // Executa a query:
+            try(ResultSet rs = stmt.executeQuery()){
+                // Verifica se encontrou algum dado:
+                if(rs.next()){
+                    int id_log = rs.getInt("id_log");
+                    LocalDateTime dataHora = rs.getObject("data_hora", LocalDateTime.class);
+                    int idFuncionario = rs.getInt("id_funcionario");
+                    FuncionarioService fService = new FuncionarioService();
+                    FuncionarioModel funcionario = fService.buscarID(idFuncionario);
+                    String acao = rs.getString("acao");
+                    String detalhes = rs.getString("detalhes");
+                    LogModel logBuscar = new LogModel(id_log, dataHora, funcionario, acao, detalhes);
+                    // Retorna o objeto:
+                    return logBuscar;
+                }
+            }
+        }
+        return null;
     }
 
     public static void registrar(Integer idFuncionario, String acao, String detalhes) {

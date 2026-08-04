@@ -56,4 +56,13 @@ public class LogModel {
     public void setDetalhes(String detalhes) {
         this.detalhes = detalhes;
     }
+
+    // Método para formatar a exibição detalhada/crua do Log:
+    public String mostrarDetalhes() {
+        String dataFormatted = (data_hora != null) ? data_hora.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) : "N/A";
+        String nomeFuncionario = (funcionario != null) ? funcionario.getNome_funcionario() + " (ID: " + funcionario.getId_funcionario() + ")" : "N/A";
+
+        return "ID Log       : " + id_log + "\n" + "Data/Hora    : " + dataFormatted + "\n" + "Funcionário  : " + nomeFuncionario + "\n"
+             + "Ação         : " + acao + "\n" + "Detalhes     : " + (detalhes != null ? detalhes : "(Sem detalhes registrados)");
+    }
 }
