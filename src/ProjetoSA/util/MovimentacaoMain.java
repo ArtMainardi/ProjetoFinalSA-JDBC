@@ -60,7 +60,7 @@ public class MovimentacaoMain {
         try{
             Main.clear();
             sty.titulo("Histórico de Movimentações");
-        sty.quadro("ID   |     Produto     |   Quantidade   |   Funcionário");
+        sty.quadro("ID   |     Produto     |   Quantidade   |   Tipo   |   Funcionário");
             // Faz a requisição:
             List<MovimentacaoModel> movimentacoes = service.listar();
             // Lista as movimentações na tela:

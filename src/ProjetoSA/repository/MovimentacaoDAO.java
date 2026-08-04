@@ -170,39 +170,114 @@ public class MovimentacaoDAO {
         // Salva estado anterior:
         MovimentacaoModel anterior = readId(m.getId_movimentacao());
         
-        // Faz a conexão e prepara a query:
-        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {
-            // Define os dados da query:
-            stmt.setInt(1, m.getQtd_movimentacao());
-            stmt.setObject(2, m.getData_movimentacao());
-            stmt.setInt(3, m.getFuncionario().getId_funcionario());
-            stmt.setInt(4, m.getProduto().getId_produto());
-            stmt.setInt(5, m.getTipo().getId_tipo());
-            stmt.setInt(6, m.getId_movimentacao()); 
-            
-            // Executa e guarda a quantidade de linhas afetadas
-            int linhasAfetadas = stmt.executeUpdate();
-            
-            // Verifica se atualizou:
-            if (linhasAfetadas == 0) {
-                return null;
+        // Query para restaurar o estoque do produto:
+        String sqlRestaurarProduto = "";
+        // Query para atualizar o estoque do produto:
+        String sqlUpdateProduto = "";
+        if(anterior.getQtd_movimentacao() != m.getQtd_movimentacao()){
+            if(anterior.getTipo().getTipo().equals("Entrada")){
+                sqlRestaurarProduto = "UPDATE Produto SET qtd_produto = qtd_produto - ? WHERE id_produto = ? AND qtd_produto >= ?";
+            } else{
+                sqlRestaurarProduto = "UPDATE Produto SET qtd_produto = qtd_produto + ? WHERE id_produto = ?";
             }
+        }
+        if(!anterior.getTipo().getTipo().equals(m.getTipo().getTipo())){
+            if(m.getTipo().getTipo().equals("Entrada")){
+                sqlUpdateProduto = "UPDATE Produto SET qtd_produto = qtd_produto + ? WHERE id_produto = ?";
+            } else{
+                sqlUpdateProduto = "UPDATE Produto SET qtd_produto = qtd_produto - ? WHERE id_produto = ? AND qtd_produto >= ?";
+            }
+        }
+        
+        // Faz a conexão:
+        Connection conn = null;
+        try{
+            // Inicia a transição:
+            conn = conexao.conectar();
+            conn.setAutoCommit(false);
 
-            // Log
-            String log = "";
             if(anterior.getQtd_movimentacao() != m.getQtd_movimentacao()){
-                log += "Quantidade: " + anterior.getQtd_movimentacao() + " -> " + m.getQtd_movimentacao() + " | ";
-            }
-            if(anterior.getData_movimentacao() != m.getData_movimentacao()){
-                log += "Data da movimentação: " + anterior.getData_movimentacao() + " -> " + m.getData_movimentacao() + " | ";
-            }
-            if(anterior.isAtivo() != m.isAtivo()){
-                log += "Status: " + (!anterior.isAtivo() ? "DESATIVO -> ATIVO" : "ATIVO -> DESATIVO") + " | ";
-            } 
-            LogDAO.registrar(Main.getIdUsuarioAtual(), "ATUALIZOU_MOVIMENTACAO",
-                "Atualizou a movimentação (ID: " + m.getId_movimentacao() + "). Mudanças feitas: " + (log.trim().isEmpty() ? "Nenhuma" : log));
+                // Prepara a query para restauração do Produto:
+                try(PreparedStatement rStmt = conn.prepareStatement(sqlRestaurarProduto)){
+                    // Define dados da query:
+                    rStmt.setInt(1, anterior.getQtd_movimentacao());
+                    rStmt.setInt(2, anterior.getProduto().getId_produto());
+                    if(anterior.getTipo().getTipo().equals("Entrada")){
+                        rStmt.setInt(3, anterior.getQtd_movimentacao());
+                    }
 
-            return m;
+                    // Executa e verifica:
+                    int linhas = rStmt.executeUpdate();
+                    if(linhas == 0){
+                        conn.rollback();
+                        throw new RuntimeException("ERRO: falha ao restaurar o estoque do produto!");
+                    }
+                }
+            }
+            if(!anterior.getTipo().getTipo().equals(m.getTipo().getTipo())){
+                // Prepara a query para atualizar o produto:
+                try(PreparedStatement pStmt = conn.prepareStatement(sqlUpdateProduto)){
+                    // Define dados da query:
+                    pStmt.setInt(1, m.getQtd_movimentacao());
+                    pStmt.setInt(2, m.getProduto().getId_produto());
+                    if(m.getTipo().getTipo().equals("Saída")){
+                        pStmt.setInt(3, m.getQtd_movimentacao());
+                    }
+
+                    // Executa e verifica:
+                    int linhas = pStmt.executeUpdate();
+                    if(linhas == 0){
+                        conn.rollback();
+                        throw new RuntimeException("ERRO: falha ao atualizar o estoque do produto!");
+                    }
+                }
+            }
+
+            // Prepara a query para atualizar a movimentação:
+            try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+                // Define os dados da query:
+                stmt.setInt(1, m.getQtd_movimentacao());
+                stmt.setObject(2, m.getData_movimentacao());
+                stmt.setInt(3, m.getFuncionario().getId_funcionario());
+                stmt.setInt(4, m.getProduto().getId_produto());
+                stmt.setInt(5, m.getTipo().getId_tipo());
+                stmt.setInt(6, m.getId_movimentacao()); 
+                
+                // Executa e guarda a quantidade de linhas afetadas
+                int linhasAfetadas = stmt.executeUpdate();
+                
+                // Verifica se atualizou:
+                if (linhasAfetadas == 0) {
+                    return null;
+                }
+
+                // Log
+                String log = "";
+                if(anterior.getQtd_movimentacao() != m.getQtd_movimentacao()){
+                    log += "Quantidade: " + anterior.getQtd_movimentacao() + " -> " + m.getQtd_movimentacao() + " | ";
+                }
+                if(anterior.getData_movimentacao() != m.getData_movimentacao()){
+                    log += "Data da movimentação: " + anterior.getData_movimentacao() + " -> " + m.getData_movimentacao() + " | ";
+                }
+                if(anterior.isAtivo() != m.isAtivo()){
+                    log += "Status: " + (!anterior.isAtivo() ? "DESATIVO -> ATIVO" : "ATIVO -> DESATIVO") + " | ";
+                } 
+                LogDAO.registrar(Main.getIdUsuarioAtual(), "ATUALIZOU_MOVIMENTACAO",
+                    "Atualizou a movimentação (ID: " + m.getId_movimentacao() + "). Mudanças feitas: " + (log.trim().isEmpty() ? "Nenhuma" : log));
+
+                conn.commit();
+                return m;
+            }
+        } catch (SQLException e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+        } finally {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
         }
     }
 
