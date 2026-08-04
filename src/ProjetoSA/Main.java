@@ -1,4 +1,6 @@
 package ProjetoSA;
+import java.util.Scanner;
+
 import ProjetoSA.connection.Conexao;
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.repository.FuncionarioDAO;
@@ -6,15 +8,13 @@ import ProjetoSA.util.FuncionarioMain;
 import ProjetoSA.util.MovimentacaoMain;
 import ProjetoSA.util.ProdutoMain;
 import ProjetoSA.util.Style;
-import java.sql.SQLException;
-import java.util.Scanner;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static Style sty = new Style();
     static FuncionarioModel usuarioAtual = new FuncionarioModel();
 
-    public static void main(String[] args) throws SQLException{
+    public static void main(String[] args){
         if(!testarConexao()){
             return;
         }
@@ -78,34 +78,38 @@ public class Main {
     }
 
     // Procedimento para tela de login:
-    public static void login() throws SQLException{
+    public static void login(){
         FuncionarioDAO service = new FuncionarioDAO();
         boolean verify = false;
 
-        // Laço de repetição para o login:
-        while(!verify){
-            sty.titulo("Tela de Login");
+        try {
+            // Laço de repetição para o login:
+            while(!verify){
+                sty.titulo("Tela de Login");
 
-            // Recebe dados do usuário:
-            System.out.print("Digite seu email: ");
-            String email = sc.nextLine();
-            System.out.print("Digite sua senha: ");
-            String senha = sc.nextLine();
+                // Recebe dados do usuário:
+                System.out.print("Digite seu email: ");
+                String email = sc.nextLine();
+                System.out.print("Digite sua senha: ");
+                String senha = sc.nextLine();
 
-            // Verifica login:
-            if(service.verificarEmail(email)){
-                if(service.verificarSenha(senha, email)){
-                    sty.quadro("Login efetuado com sucesso!");
-                    verify = true;
-                    usuarioAtual = service.readEmail(email);
-                }else{
-                    sty.quadro("ERRO: senha incorreta!");
+                // Verifica login:
+                if(service.verificarEmail(email)){
+                    if(service.verificarSenha(senha, email)){
+                        sty.quadro("Login efetuado com sucesso!");
+                        verify = true;
+                        usuarioAtual = service.readEmail(email);
+                    }else{
+                        sty.quadro("ERRO: senha incorreta!");
+                    }
+                } else{
+                    sty.quadro("ERRO: email inválido!");
                 }
-            } else{
-                sty.quadro("ERRO: email inválido!");
+                continuar();
+                clear();
             }
-            continuar();
-            clear();
+        } catch (Exception e) {
+            sty.quadro(e.getMessage());
         }
     }
 

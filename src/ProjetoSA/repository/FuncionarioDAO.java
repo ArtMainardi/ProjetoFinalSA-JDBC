@@ -1,13 +1,15 @@
 package ProjetoSA.repository;
-import ProjetoSA.Main;
-import ProjetoSA.connection.Conexao;
-import ProjetoSA.model.FuncionarioModel;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import org.mindrot.jbcrypt.BCrypt;
+import ProjetoSA.Main;
+import ProjetoSA.connection.Conexao;
+import ProjetoSA.model.FuncionarioModel;
 
 public class FuncionarioDAO {
     Conexao conexao = new Conexao();
@@ -15,13 +17,15 @@ public class FuncionarioDAO {
     // CREATE:
     public FuncionarioModel create(FuncionarioModel f) throws SQLException{
         String sql = "INSERT INTO Funcionario(nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo) VALUES (?,?,?,?,?)";
+        // Criptografa a senha:
+        String senhaCriptografada = BCrypt.hashpw(f.getSenha_funcionario(), BCrypt.gensalt());
 
         // Faz a conexão e prepara a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             // Define os dados da query:
             stmt.setString(1, f.getNome_funcionario());
             stmt.setString(2, f.getEmail_funcionario());
-            stmt.setString(3, f.getSenha_funcionario());
+            stmt.setString(3, senhaCriptografada);
             stmt.setBoolean(4, f.isAdmin());
             stmt.setBoolean(5, f.isAtivo());
             // Executa a query:
@@ -132,6 +136,8 @@ public class FuncionarioDAO {
     // UPDATE:
     public FuncionarioModel update(FuncionarioModel f) throws SQLException{
         String sql = "UPDATE Funcionario SET nome_funcionario = ?, email_funcionario = ?, senha_funcionario = ?, is_admin = ?, ativo = ? WHERE id_funcionario = ?";
+        // Criptografa a senha:
+        String senhaCriptografada = BCrypt.hashpw(f.getSenha_funcionario(), BCrypt.gensalt());   
         // Salva estado anterior:
         FuncionarioModel anterior = readId(f.getId_funcionario());
 
@@ -140,7 +146,7 @@ public class FuncionarioDAO {
             // Define os dados da query:
             stmt.setString(1, f.getNome_funcionario());
             stmt.setString(2, f.getEmail_funcionario());
-            stmt.setString(3, f.getSenha_funcionario());
+            stmt.setString(3, senhaCriptografada);
             stmt.setBoolean(4, f.isAdmin());
             stmt.setBoolean(5, f.isAtivo());
             stmt.setInt(6, f.getId_funcionario());
@@ -230,7 +236,7 @@ public class FuncionarioDAO {
                 String senhaBanco = resultado.getString("senha_funcionario");
 
                 // Verifica se a senha do BD é a mesma que a digitada pelo usuário:
-                if(senhaBanco.equals(senha)){
+                if(BCrypt.checkpw(senha, senhaBanco)){
                     // Log:
                     LogDAO.registrar(Main.getIdUsuarioAtual(), "REALIZOU_LOGIN", 
                         "Usuário " + resultado.getString("nome_funcionario") + " (ID: " + resultado.getInt("id_funcionario") + ") realizou login.");
