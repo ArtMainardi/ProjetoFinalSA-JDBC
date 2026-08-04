@@ -72,6 +72,31 @@ public class FuncionarioDAO {
         // Retorna a lista:
         return lista;
     }
+    //Read desativados
+     public ArrayList<FuncionarioModel> readDesativados() throws SQLException{
+        // Cria a lista vazia:
+        ArrayList<FuncionarioModel> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Funcionario WHERE ativo = true";
+        
+        // Faz a conexão, prepara e executa a query:
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            // Adiciona objetos na lista:
+            while(rs.next()){
+                // Define os dados:
+                int id_funcionario = rs.getInt("id_funcionario");
+                String nome_funcionario = rs.getString("nome_funcionario");
+                String email_funcionario = rs.getString("email_funcionario");
+                String senha_funcionario = rs.getString("senha_funcionario");
+                boolean is_admin = rs.getBoolean("is_admin");
+                boolean ativo = rs.getBoolean("ativo");
+
+                // Adiciona o objeto criado na lista:
+                lista.add(new FuncionarioModel(id_funcionario, nome_funcionario, email_funcionario, senha_funcionario, is_admin, ativo));
+            }
+        }
+        // Retorna a lista:
+        return lista;
+    }
 
     // READ (ID):
     public FuncionarioModel readId(int id) throws SQLException{
