@@ -20,35 +20,74 @@ public class MovimentacaoDAO {
 
     // CREATE:
     public MovimentacaoModel create(MovimentacaoModel m) throws SQLException {
+        String sqlUpdateEstoque;
+        if(m.getTipo().getTipo().equals("Entrada")){
+            sqlUpdateEstoque = "UPDATE Produto SET qtd_produto = qtd_produto + ? WHERE id_produto = ?";
+        } else{
+            sqlUpdateEstoque = "UPDATE Produto SET qtd_produto = qtd_produto - ? WHERE id_produto = ? AND qtd_produto >= ?";
+        }
         String sql = "INSERT INTO Movimentacao (qtd_movimentacao, data_movimentacao, id_funcionario, id_produto, id_tipo) VALUES (?, ?, ?, ?, ?)";
         
-        // Faz a conexão e prepara a query:
-        try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
-            // Define os valores da query:
-            stmt.setInt(1, m.getQtd_movimentacao());
-            stmt.setObject(2, m.getData_movimentacao()); // LocalDate funciona muito bem com setObject
-            stmt.setInt(3, m.getFuncionario().getId_funcionario());
-            stmt.setInt(4, m.getProduto().getId_produto());
-            stmt.setInt(5, m.getTipo().getId_tipo());
-            // Executa a query:
-            stmt.executeUpdate();
-            
-            // Verifica o ID gerado:
-            try (ResultSet rs = stmt.getGeneratedKeys()){
-                if(rs.next()){
-                    m.setId_movimentacao(rs.getInt(1));
+        // Faz a conexão:
+        Connection conn = null;
+        try{
+            // Inicia a transição:
+            conn = conexao.conectar();
+            conn.setAutoCommit(false);
 
-                    // Log:
-                    LogDAO.registrar(Main.getIdUsuarioAtual(), "CADASTROU_MOVIMENTACAO", 
-                        "Cadastrou a movimentação (ID: " + m.getId_movimentacao() + "). ");
-                         return m;
+            // Prepara a query para a atualização do estoque
+            try(PreparedStatement pStmt = conn.prepareStatement(sqlUpdateEstoque)){
+                // Define os dados da query:
+                pStmt.setInt(1, m.getQtd_movimentacao());
+                pStmt.setInt(2, m.getProduto().getId_produto());
+                if(m.getTipo().getTipo().equals("Saída")){
+                    pStmt.setInt(3, m.getQtd_movimentacao());
+                }
+                // Executa e verifica:
+                int linhas = pStmt.executeUpdate();
+                if(linhas == 0){
+                    conn.rollback();
+                    throw new RuntimeException("ERRO: falha ao atualizar o estoque do produto!");
+                }
 
-                } else{
-                    throw new SQLException("Falha ao inserir movimentação, nenhum ID foi gerado.");
+                // Prepara query para o registro da movimentação:
+                try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+                    // Define os valores da query:
+                    stmt.setInt(1, m.getQtd_movimentacao());
+                    stmt.setObject(2, m.getData_movimentacao()); // LocalDate funciona muito bem com setObject
+                    stmt.setInt(3, m.getFuncionario().getId_funcionario());
+                    stmt.setInt(4, m.getProduto().getId_produto());
+                    stmt.setInt(5, m.getTipo().getId_tipo());
+                    // Executa a query:
+                    stmt.executeUpdate();
+                    
+                    // Verifica o ID gerado:
+                    try (ResultSet rs = stmt.getGeneratedKeys()){
+                        if(rs.next()){
+                            m.setId_movimentacao(rs.getInt(1));
+                            // Log:
+                            LogDAO.registrar(Main.getIdUsuarioAtual(), "CADASTROU_MOVIMENTACAO", 
+                                "Cadastrou a movimentação (ID: " + m.getId_movimentacao() + "). ");
+                            conn.commit();
+                            return m;
+                        } else{
+                            conn.rollback();
+                            throw new SQLException("Falha ao inserir movimentação, nenhum ID foi gerado.");
+                        }
+                    }
                 }
             }
+        } catch (SQLException e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw e;
+        } finally {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
         }
-        
     }
 
     // READ:
@@ -128,8 +167,8 @@ public class MovimentacaoDAO {
     // UPDATE:
     public MovimentacaoModel update(MovimentacaoModel m) throws SQLException {
         String sql = "UPDATE Movimentacao SET qtd_movimentacao = ?, data_movimentacao = ?, id_funcionario = ?, id_produto = ?, id_tipo = ? WHERE id_movimentacao = ?";
-            // Salva estado anterior:
-            MovimentacaoModel anterior = readId(m.getId_movimentacao());
+        // Salva estado anterior:
+        MovimentacaoModel anterior = readId(m.getId_movimentacao());
         
         // Faz a conexão e prepara a query:
         try (Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);) {

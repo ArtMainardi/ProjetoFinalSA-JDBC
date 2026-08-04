@@ -1,6 +1,7 @@
 package ProjetoSA.service;
 
 import ProjetoSA.model.MovimentacaoModel;
+import ProjetoSA.model.TipoMovimentacaoModel;
 import ProjetoSA.repository.MovimentacaoDAO;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -34,6 +35,13 @@ public class MovimentacaoService {
         // Verifica o tipo de movimentação:
         TipoMovimentacaooService tService = new TipoMovimentacaooService();
         m.setTipo(tService.buscar(idTipo));
+        // Verifica quantidade do produto para saída:
+        if(m.getTipo().getTipo().equals("Saída")){
+            if(m.getProduto().getQtd_produto() < m.getQtd_movimentacao()){
+                throw new RuntimeException("Erro: Quantidade de estoque do produto insuficiente para a transferência! (" 
+                    + m.getProduto().getQtd_produto() + " - " + m.getQtd_movimentacao() + ").");
+            }
+        }
 
         // Manda a requisição para o repository:
         return repository.create(m);
