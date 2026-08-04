@@ -12,7 +12,7 @@ import ProjetoSA.util.Style;
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static Style sty = new Style();
-    static FuncionarioModel usuarioAtual = new FuncionarioModel();
+    static FuncionarioModel usuarioAtual = null;
 
     public static void main(String[] args){
         if(!testarConexao()){
@@ -132,6 +132,10 @@ public class Main {
     }
 
     public static Integer getIdUsuarioAtual(){
-        return usuarioAtual.getId_funcionario();
+        if(usuarioAtual != null){
+            return usuarioAtual.getId_funcionario();
+        } else{
+            return null;
+        }
     }
 }

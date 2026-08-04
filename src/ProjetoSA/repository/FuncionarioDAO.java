@@ -238,7 +238,7 @@ public class FuncionarioDAO {
                 // Verifica se a senha do BD é a mesma que a digitada pelo usuário:
                 if(BCrypt.checkpw(senha, senhaBanco)){
                     // Log:
-                    LogDAO.registrar(Main.getIdUsuarioAtual(), "REALIZOU_LOGIN", 
+                    LogDAO.registrar(resultado.getInt("id_funcionario"), "REALIZOU_LOGIN", 
                         "Usuário " + resultado.getString("nome_funcionario") + " (ID: " + resultado.getInt("id_funcionario") + ") realizou login.");
                     return true;
                 } else{
