@@ -27,6 +27,7 @@ public class ProdutoMain {
                                 + "1- Listar todos os Produtos \n"
                                 + "2- Cadastrar Produto \n"
                                 + "3- Detalhes de um Produto \n"
+                                + "4- Listar Produtos Desativados \n"
                                 + "0- Voltar");
                 option = Integer.parseInt(sc.nextLine().trim());
 
@@ -41,6 +42,10 @@ public class ProdutoMain {
                         break;
                     case 3:
                         detalhesProduto();
+                        break;
+                    case 4:
+                        mostrarDesativados();
+                        Main.continuar();
                         break;
                     case 0:
                         break;
@@ -59,7 +64,7 @@ public class ProdutoMain {
     public static void mostrarHistorico(){
         try{
             Main.clear();
-            sty.titulo("Histórico de Produtos");
+            sty.titulo("Lista de Produtos");
             sty.quadro("ID   |     Produto     |   Quantidade   |   Quantidade Mínima");
 
             // Faz a requisição:
@@ -244,5 +249,23 @@ public class ProdutoMain {
         }
         Main.continuar();
         Main.clear();
+    }
+
+    // Procedimento para printar os produtos desativados:
+    public static void mostrarDesativados(){
+        try{
+            Main.clear();
+            sty.titulo("Produtos Desativados");
+            sty.quadro("ID   |     Produto     |   Quantidade   |   Quantidade Mínima");
+
+            // Faz a requisição:
+            List<ProdutoModel> produtos = service.listarDesativados();
+            // Lista os produtos na tela:
+            for(ProdutoModel p : produtos){
+                sty.quadro(p.mostrarDados());
+            }
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
     }
 }
