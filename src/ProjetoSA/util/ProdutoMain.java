@@ -4,18 +4,21 @@ import java.util.List;
 import java.util.Scanner;
 
 import ProjetoSA.Main;
+import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.model.ProdutoModel;
 import ProjetoSA.service.ProdutoService;
 
 public class ProdutoMain {
     static Style sty;
     static Scanner sc;
+    static FuncionarioModel usuarioAtual;
     static ProdutoService service = new ProdutoService();
 
-    public static void main(Style style, Scanner scanner){
+    public static void main(Style style, Scanner scanner, FuncionarioModel u){
         // Definindo variáveis:
         sty = style;
         sc = scanner;
+        usuarioAtual = u;
 
         Main.clear();
         // Menu de opções:
@@ -27,6 +30,7 @@ public class ProdutoMain {
                                 + "1- Listar todos os Produtos \n"
                                 + "2- Cadastrar Produto \n"
                                 + "3- Detalhes de um Produto \n"
+                                + "4- Listar Produtos Desativados \n"
                                 + "0- Voltar");
                 option = Integer.parseInt(sc.nextLine().trim());
 
@@ -41,6 +45,10 @@ public class ProdutoMain {
                         break;
                     case 3:
                         detalhesProduto();
+                        break;
+                    case 4:
+                        mostrarDesativados();
+                        Main.continuar();
                         break;
                     case 0:
                         break;
@@ -59,7 +67,7 @@ public class ProdutoMain {
     public static void mostrarHistorico(){
         try{
             Main.clear();
-            sty.titulo("Histórico de Produtos");
+            sty.titulo("Lista de Produtos");
             sty.quadro("ID   |     Produto     |   Quantidade   |   Quantidade Mínima");
 
             // Faz a requisição:
@@ -118,27 +126,34 @@ public class ProdutoMain {
                                 + "Status: " + (alvo.isAtivo() ? "ATIVO" : "DESATIVO")
                 );
 
-                System.out.println("\n\nDigite uma opção: \n"
-                                + "1- Editar Produto \n"
-                                + "2- " + (alvo.isAtivo() ? "Desativar" : "Ativar") + " Produto \n"
-                                + "0- Voltar"
-                );
-
-                option = Integer.parseInt(sc.nextLine().trim());
-
-                switch (option) {
-                    case 1:
-                        modificar(alvo);
-                        option = 0;
-                        break;
-                    case 2:
-                        desativarOuAtivar(alvo);
-                        option = 0;
-                        break;
-                    case 0:
-                        break;
-                    default:
-                        throw new RuntimeException("ERRO: opção digitada inválida!");
+                // Verifica tipo de usuário:
+                if(usuarioAtual.isAdmin()){
+                    // Mostra menu de opções: 
+                    System.out.println("\n\nDigite uma opção: \n"
+                                    + "1- Editar Produto \n"
+                                    + "2- " + (alvo.isAtivo() ? "Desativar" : "Ativar") + " Produto \n"
+                                    + "0- Voltar"
+                    );
+                    option = Integer.parseInt(sc.nextLine().trim());
+                    // Submenu das movimentações:
+                    switch (option) {
+                        case 1:
+                            modificar(alvo);
+                            option = 0;
+                            break;
+                        case 2:
+                            desativarOuAtivar(alvo);
+                            option = 0;
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            throw new RuntimeException("ERRO: opção digitada inválida!");
+                    }
+                } else{
+                    System.out.println(); // Espaçamento
+                    Main.continuar();
+                    option = 0;
                 }
 
                 Main.clear();
@@ -244,5 +259,23 @@ public class ProdutoMain {
         }
         Main.continuar();
         Main.clear();
+    }
+
+    // Procedimento para printar os produtos desativados:
+    public static void mostrarDesativados(){
+        try{
+            Main.clear();
+            sty.titulo("Produtos Desativados");
+            sty.quadro("ID   |     Produto     |   Quantidade   |   Quantidade Mínima");
+
+            // Faz a requisição:
+            List<ProdutoModel> produtos = service.listarDesativados();
+            // Lista os produtos na tela:
+            for(ProdutoModel p : produtos){
+                sty.quadro(p.mostrarDados());
+            }
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
     }
 }

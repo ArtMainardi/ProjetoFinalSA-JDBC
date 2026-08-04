@@ -3,6 +3,7 @@ package ProjetoSA.service;
 
 import java.sql.SQLException;
 import java.util.List;
+
 import ProjetoSA.model.FuncionarioModel;
 import ProjetoSA.repository.FuncionarioDAO;
 
@@ -27,6 +28,18 @@ public class FuncionarioService {
         // Verifica se encontrou algum dado:
         if(lista.isEmpty()){
             throw new RuntimeException("Nenhum funcionário salvo no banco de dados!");
+        }
+        // Retorna a lista:
+        return lista;
+    }
+    
+    // Listar Desativados:
+    public List<FuncionarioModel> listarDesativados() throws SQLException{
+        // Cria a lista e envia a requisição para o repository:
+        List<FuncionarioModel> lista = repository.readDesativados();
+        // Verifica se encontrou algum dado:
+        if(lista.isEmpty()){
+            throw new RuntimeException("Nenhum funcionário desativado no banco de dados!");
         }
         // Retorna a lista:
         return lista;

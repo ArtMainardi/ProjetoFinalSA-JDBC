@@ -26,9 +26,10 @@ public class MovimentacaoMain {
             try{
                 sty.titulo("Movimentações");
                 System.out.println("Digite uma opção: \n"
-                                + "1- Visualizar Histórico Geral \n"
-                                + "2- Registrar Movimentação \n"
-                                + "3- Detalhes de uma Movimentação \n"
+                                + "1 - Visualizar Histórico Geral \n"
+                                + "2 - Registrar Movimentação \n"
+                                + "3 - Detalhes de uma Movimentação \n"
+                                + "4 - Mostrar movimentações desativadas \n"
                                 + "0- Voltar");
                 option = Integer.parseInt(sc.nextLine().trim());
                 switch (option) {
@@ -42,6 +43,10 @@ public class MovimentacaoMain {
                         break;
                     case 3:
                         detalhesMovimentacao(usuarioAtual);
+                        break;
+                    case 4:
+                        mostrarDesativados();
+                        Main.continuar();
                         break;
                     case 0:
                         break;
@@ -257,5 +262,21 @@ public class MovimentacaoMain {
         }
         Main.continuar();
         Main.clear();
+    }
+    public static void mostrarDesativados(){
+        try{
+            Main.clear();
+            sty.titulo("Movimentações Desativadas");
+            sty.quadro("ID   |     Quantidade     |   Data   |   Funcionario   |   Produto   |   Tipo");
+
+            // Faz a requisição:
+            List<MovimentacaoModel> movimentacoes = service.listarDesativados();
+            // Lista os produtos na tela:
+            for(MovimentacaoModel m : movimentacoes){
+                sty.quadro(m.mostrarDados());
+            }
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
     }
 }

@@ -52,6 +52,18 @@ public class ProdutoService {
         return produto;
     }
 
+    // Listar Desativados
+    public List<ProdutoModel> listarDesativados() throws SQLException{
+        List<ProdutoModel> lista = repository.readDesativados();
+        
+        // Verifica se encontrou algum dado:
+        if(lista.isEmpty()){
+            throw new RuntimeException("Nenhum produto desativado encontrado!");
+        }
+        // Retorna a lista:
+        return lista;
+    }
+
      // Atualizar
     public ProdutoModel atualizar(ProdutoModel modifiedProduto) throws SQLException{
         //  Verifica 'nome' do produto:

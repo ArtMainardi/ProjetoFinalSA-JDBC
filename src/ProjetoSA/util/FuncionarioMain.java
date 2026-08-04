@@ -10,12 +10,14 @@ import ProjetoSA.service.FuncionarioService;
 public class FuncionarioMain {
     static Style sty;
     static Scanner sc;
+    static FuncionarioModel usuarioAtual;
     static FuncionarioService service = new FuncionarioService();
 
-    public static void main(Style style, Scanner scanner){
+    public static void main(Style style, Scanner scanner, FuncionarioModel u){
         // Definindo variáveis:
         sty = style;
         sc = scanner;
+        usuarioAtual = u;
 
         Main.clear();
         // Menu de opções:
@@ -24,10 +26,11 @@ public class FuncionarioMain {
             try{
                 sty.titulo("Funcionários");
                 System.out.println("Digite uma opção: \n"
-                                + "1- Listar todos os Funcionários \n"
-                                + "2- Cadastrar Funcionário \n"
-                                + "3- Detalhes de um Funcionário \n"
-                                + "0- Voltar");
+                                + "1 - Listar todos os Funcionários \n"
+                                + "2 - Cadastrar Funcionário \n"
+                                + "3 - Detalhes de um Funcionário \n"
+                                + "4 - Listar Funcionarios Desativados \n"
+                                + "0 - Voltar");
                 option = Integer.parseInt(sc.nextLine().trim());
 
                 switch (option) {
@@ -41,6 +44,10 @@ public class FuncionarioMain {
                         break;
                     case 3:
                         detalhesFuncionario();
+                        break;
+                    case 4:
+                        mostrarDesativados();
+                        Main.continuar();
                         break;
                     case 0:
                         break;
@@ -131,27 +138,34 @@ public class FuncionarioMain {
                                 + "Status: " + (alvo.isAtivo() ? "ATIVO" : "DESATIVO")
                 );
 
-                System.out.println("\n\nDigite uma opção: \n"
-                                + "1- Editar Funcionário \n"
-                                + "2- " + (alvo.isAtivo() ? "Desativar" : "Ativar") + " Funcionário \n"
-                                + "0- Voltar"
-                );
-
-                option = Integer.parseInt(sc.nextLine().trim());
-
-                switch (option) {
-                    case 1:
-                        modificar(alvo);
-                        option = 0;
-                        break;
-                    case 2:
-                        desativarOuAtivar(alvo);
-                        option = 0;
-                        break;
-                    case 0:
-                        break;
-                    default:
-                        throw new RuntimeException("ERRO: opção digitada inválida!");
+                // Verifica tipo de usuário:
+                if(usuarioAtual.isAdmin()){
+                    // Mostra menu de opções: 
+                    System.out.println("\n\nDigite uma opção: \n"
+                                    + "1- Editar Funcionário \n"
+                                    + "2- " + (alvo.isAtivo() ? "Desativar" : "Ativar") + " Funcionário \n"
+                                    + "0- Voltar"
+                    );
+                    option = Integer.parseInt(sc.nextLine().trim());
+                    // Submenu das movimentações:
+                    switch (option) {
+                        case 1:
+                            modificar(alvo);
+                            option = 0;
+                            break;
+                        case 2:
+                            desativarOuAtivar(alvo);
+                            option = 0;
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            throw new RuntimeException("ERRO: opção digitada inválida!");
+                    }
+                } else{
+                    System.out.println(); // Espaçamento
+                    Main.continuar();
+                    option = 0;
                 }
 
                 Main.clear();
@@ -260,5 +274,21 @@ public class FuncionarioMain {
 
         Main.continuar();
         Main.clear();
+    }
+    public static void mostrarDesativados(){
+        try{
+            Main.clear();
+            sty.titulo("Funcionarios Desativados");
+            sty.quadro("ID   |     Nome     |   Email   |   Senha   |   Admin   |");
+
+            // Faz a requisição:
+            List<FuncionarioModel> funcionarios = service.listarDesativados();
+            // Lista os produtos na tela:
+            for(FuncionarioModel f : funcionarios){
+                sty.quadro(f.mostrarDados());
+            }
+        } catch(Exception e){
+            sty.quadro(e.getMessage());
+        }
     }
 }

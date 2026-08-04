@@ -1,11 +1,12 @@
 package ProjetoSA.service;
 
-import ProjetoSA.model.MovimentacaoModel;
-import ProjetoSA.repository.MovimentacaoDAO;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import ProjetoSA.model.MovimentacaoModel;
+import ProjetoSA.repository.MovimentacaoDAO;
 
 public class MovimentacaoService {
     private MovimentacaoDAO repository = new MovimentacaoDAO();
@@ -54,6 +55,19 @@ public class MovimentacaoService {
         // Verifica se encontrou algum dado:
         if(lista == null || lista.isEmpty()){
             throw new RuntimeException("Erro: Nenhuma movimentação salva!");
+        }
+        // Retorna a lista:
+        return lista;
+    }
+    
+    // Listar Desativados:
+    public List<MovimentacaoModel> listarDesativados() throws SQLException{
+        // Cria lista e manda requisição para o repository:
+        List<MovimentacaoModel> lista;
+        lista = repository.readDesativados();
+        // Verifica se encontrou algum dado:
+        if(lista == null || lista.isEmpty()){
+            throw new RuntimeException("Erro: Nenhuma movimentação desativada!");
         }
         // Retorna a lista:
         return lista;

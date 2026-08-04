@@ -38,13 +38,13 @@ public class Main {
                         MovimentacaoMain.main(sty, sc, usuarioAtual);
                         break;
                     case 2:
-                        ProdutoMain.main(sty, sc);
+                        ProdutoMain.main(sty, sc, usuarioAtual);
                         break;
                     case 3:
                         if(!usuarioAtual.isAdmin()){
                             throw new Exception("ERRO: opção digitada inválida!");
                         } else{
-                            FuncionarioMain.main(sty, sc);
+                            FuncionarioMain.main(sty, sc, usuarioAtual);
                         }
                         break;
                     case 0:
