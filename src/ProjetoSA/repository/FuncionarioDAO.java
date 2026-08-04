@@ -51,7 +51,7 @@ public class FuncionarioDAO {
     public ArrayList<FuncionarioModel> read() throws SQLException{
         // Cria a lista vazia:
         ArrayList<FuncionarioModel> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Funcionario WHERE ativo = true";
+        String sql = "SELECT * FROM Funcionario WHERE ativo = false";
         
         // Faz a conexão, prepara e executa a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
