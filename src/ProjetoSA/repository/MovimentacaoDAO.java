@@ -174,14 +174,14 @@ public class MovimentacaoDAO {
         String sqlRestaurarProduto = "";
         // Query para atualizar o estoque do produto:
         String sqlUpdateProduto = "";
-        if(anterior.getQtd_movimentacao() != m.getQtd_movimentacao()){
+        boolean modifyProduto = false;
+        if(anterior.getQtd_movimentacao() != m.getQtd_movimentacao() || !anterior.getTipo().getTipo().equals(m.getTipo().getTipo())){
+            modifyProduto = true;
             if(anterior.getTipo().getTipo().equals("Entrada")){
                 sqlRestaurarProduto = "UPDATE Produto SET qtd_produto = qtd_produto - ? WHERE id_produto = ? AND qtd_produto >= ?";
             } else{
                 sqlRestaurarProduto = "UPDATE Produto SET qtd_produto = qtd_produto + ? WHERE id_produto = ?";
             }
-        }
-        if(!anterior.getTipo().getTipo().equals(m.getTipo().getTipo())){
             if(m.getTipo().getTipo().equals("Entrada")){
                 sqlUpdateProduto = "UPDATE Produto SET qtd_produto = qtd_produto + ? WHERE id_produto = ?";
             } else{
@@ -196,7 +196,7 @@ public class MovimentacaoDAO {
             conn = conexao.conectar();
             conn.setAutoCommit(false);
 
-            if(anterior.getQtd_movimentacao() != m.getQtd_movimentacao()){
+            if(modifyProduto){
                 // Prepara a query para restauração do Produto:
                 try(PreparedStatement rStmt = conn.prepareStatement(sqlRestaurarProduto)){
                     // Define dados da query:
@@ -213,8 +213,6 @@ public class MovimentacaoDAO {
                         throw new RuntimeException("ERRO: falha ao restaurar o estoque do produto!");
                     }
                 }
-            }
-            if(!anterior.getTipo().getTipo().equals(m.getTipo().getTipo())){
                 // Prepara a query para atualizar o produto:
                 try(PreparedStatement pStmt = conn.prepareStatement(sqlUpdateProduto)){
                     // Define dados da query:

@@ -1,7 +1,6 @@
 package ProjetoSA.service;
 
 import ProjetoSA.model.MovimentacaoModel;
-import ProjetoSA.model.TipoMovimentacaoModel;
 import ProjetoSA.repository.MovimentacaoDAO;
 import java.sql.SQLException;
 import java.time.LocalDate;
