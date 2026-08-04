@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class TipoMovimentacaoDAO {
         String sql = "INSERT INTO tipo_movimentacao(tipo) VALUES (?)";
 
         // Faz a conexão e prepara a query:
-        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql)){
+        try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             // Definne os dados da query:
             stmt.setString(1, t.getTipo());
             stmt.executeUpdate();
@@ -36,7 +37,7 @@ public class TipoMovimentacaoDAO {
     // READ:
     public List<TipoMovimentacaoModel> read() throws SQLException{
         List<TipoMovimentacaoModel> lista = new ArrayList<>();
-        String sql = "SELECT * FROM produtos";
+        String sql = "SELECT * FROM TipoMovimentacao";
        
         // Faz a conexão, prepara e executa a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery();){
@@ -52,7 +53,7 @@ public class TipoMovimentacaoDAO {
 
     // READ (ID):
     public TipoMovimentacaoModel readId(int id) throws SQLException{
-        String sql = "SELECT * FROM produtos where id_tipo = ?";
+        String sql = "SELECT * FROM TipoMovimentacao where id_tipo = ?";
        
         // Faz a conexão e prepara a query:
         try(Connection conn = conexao.conectar(); PreparedStatement stmt = conn.prepareStatement(sql);){

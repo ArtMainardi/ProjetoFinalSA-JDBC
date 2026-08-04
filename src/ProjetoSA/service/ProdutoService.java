@@ -38,7 +38,7 @@ public class ProdutoService {
     }
 
     // Buscar id
-    public ProdutoModel buscarID(int id_produto) throws SQLException{
+    public ProdutoModel buscarId(int id_produto) throws SQLException{
         // Verifica integridade do ID:
         if(id_produto < 0){
             throw new RuntimeException("ERRO: ID informado inválido!");
@@ -50,6 +50,18 @@ public class ProdutoService {
         }
         // Retorna o produto:
         return produto;
+    }
+
+    // Listar Desativados
+    public List<ProdutoModel> listarDesativados() throws SQLException{
+        List<ProdutoModel> lista = repository.readDesativados();
+        
+        // Verifica se encontrou algum dado:
+        if(lista.isEmpty()){
+            throw new RuntimeException("Nenhum produto desativado encontrado!");
+        }
+        // Retorna a lista:
+        return lista;
     }
 
      // Atualizar

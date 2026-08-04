@@ -1,6 +1,7 @@
 package ProjetoSA.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class MovimentacaoModel {
     private int id_movimentacao;
@@ -11,20 +12,18 @@ public class MovimentacaoModel {
     private TipoMovimentacaoModel tipo;
     private boolean ativo = true;
 
-    public MovimentacaoModel(int id_movimentacao, int qtd_movimentacao, LocalDate data_movimentacao, FuncionarioModel funcionario, ProdutoModel produto, TipoMovimentacaoModel tipo) {
+    public MovimentacaoModel(int id_movimentacao, int qtd_movimentacao, LocalDate data_movimentacao, FuncionarioModel funcionario, ProdutoModel produto, TipoMovimentacaoModel tipo, boolean ativo) {
         this.id_movimentacao = id_movimentacao;
         this.qtd_movimentacao = qtd_movimentacao;
         this.data_movimentacao = data_movimentacao;
         this.funcionario = funcionario;
         this.produto = produto;
         this.tipo = tipo;
+        this.ativo = ativo;
     }
-    public MovimentacaoModel(int qtd_movimentacao, LocalDate data_movimentacao, FuncionarioModel funcionario, ProdutoModel produto, TipoMovimentacaoModel tipo) {
+    // Construtor para cadastro:
+    public MovimentacaoModel(int qtd_movimentacao) {
         this.qtd_movimentacao = qtd_movimentacao;
-        this.data_movimentacao = data_movimentacao;
-        this.funcionario = funcionario;
-        this.produto = produto;
-        this.tipo = tipo;
     }
 
 
@@ -82,5 +81,21 @@ public class MovimentacaoModel {
     
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    // Métodos:
+    public String mostrarDados(){
+        // Cotrola formatação da tabela:
+        String extra = "";
+        for(int cont = produto.getNome_produto().length(); cont < 20; cont++){
+            extra += " ";
+        }
+        // Retorna os dados formatados:
+        return id_movimentacao + "  |  " + (produto.getNome_produto() + extra) + "  |  " + qtd_movimentacao
+            + "  |  " + tipo.getTipo() + "  |  " + funcionario.getNome_funcionario() + " - ID " + funcionario.getId_funcionario();
+    }
+    public String dataFormatada(){
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return data_movimentacao.format(formato);
     }
 }
