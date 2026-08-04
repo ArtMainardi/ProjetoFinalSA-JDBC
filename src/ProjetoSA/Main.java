@@ -126,4 +126,8 @@ public class Main {
         System.out.print("Pressione ENTER para continuar");
         sc.nextLine();
     }
+
+    public static Integer getIdUsuarioAtual(){
+        return usuarioAtual.getId_funcionario();
+    }
 }
